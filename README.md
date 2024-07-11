@@ -4,6 +4,12 @@ This project is generated with the [create-solana-dapp](https://github.com/solan
 
 ## Getting Started
 
+Start the Next.js app: $ npm run dev
+
+Run Anchor commands: $ npm run anchor build | test | localnet | deploy │
+
+Generate more features using the following command: $ npm run feature
+
 ### Prerequisites
 
 - Node v18.18.0 or higher
