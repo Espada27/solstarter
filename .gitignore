@@ -46,7 +46,3 @@ anchor/target/.rustc_info.json
 !anchor/target/types/*.ts
 test-ledger
 .yarn
-# packages lock files & env
-package-lock.json
-.env.serve.development
-anchor/Cargo.lock

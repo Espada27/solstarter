@@ -1,23 +1,21 @@
 'use client';
 
 import { useWallet } from '@solana/wallet-adapter-react';
+import { ExplorerLink } from '../cluster/cluster-ui';
 import { WalletButton } from '../solana/solana-provider';
 import { AppHero, ellipsify } from '../ui/ui-layout';
-import { ExplorerLink } from '../cluster/cluster-ui';
-import { useCounterProgram } from './counter-data-access';
-import { CounterCreate, CounterList } from './counter-ui';
+import { useSolstarterProgram } from './solstarter-data-access';
+import { SolstarterCreate, SolstarterProgram } from './solstarter-ui';
 
-export default function CounterFeature() {
+export default function SolstarterFeature() {
   const { publicKey } = useWallet();
-  const { programId } = useCounterProgram();
+  const { programId } = useSolstarterProgram();
 
   return publicKey ? (
     <div>
       <AppHero
-        title="Counter"
-        subtitle={
-          'Create a new account by clicking the "Create" button. The state of a account is stored on-chain and can be manipulated by calling the program\'s methods (increment, decrement, set, and close).'
-        }
+        title="Solstarter"
+        subtitle={'Run the program by clicking the "Run program" button.'}
       >
         <p className="mb-6">
           <ExplorerLink
@@ -25,15 +23,15 @@ export default function CounterFeature() {
             label={ellipsify(programId.toString())}
           />
         </p>
-        <CounterCreate />
+        <SolstarterCreate />
       </AppHero>
-      <CounterList />
+      <SolstarterProgram />
     </div>
   ) : (
     <div className="max-w-4xl mx-auto">
       <div className="hero py-[64px]">
         <div className="hero-content text-center">
-          <WalletButton />
+          <WalletButton className="btn btn-primary" />
         </div>
       </div>
     </div>
