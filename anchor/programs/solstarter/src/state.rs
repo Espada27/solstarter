@@ -56,7 +56,7 @@ pub mod user {
     #[account]
     #[derive(InitSpace)]
     pub struct User {
-        pub wallet_pub_key: Pubkey,
+        pub wallet_pubkey: Pubkey,
 
         #[max_len(64)]
         name: String,
@@ -82,9 +82,9 @@ pub mod contribution {
     pub struct Contribution {
         pub amount: u32,
 
-        pub user_pub_key: Pubkey,
+        pub user_pubkey: Pubkey,
 
-        pub project_pub_key: Pubkey,
+        pub project_pubkey: Pubkey,
     }
 
     impl Contribution {
