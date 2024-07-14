@@ -7,7 +7,7 @@ pub mod project {
         pub owner_pubkey: Pubkey,
 
         #[max_len(64)]
-        pub project_name: String,
+        pub name: String,
 
         #[max_len(128)]
         pub image_url: String,
@@ -21,13 +21,13 @@ pub mod project {
         pub status: Status,
         pub contribution_counter: u16,
 
-        #[max_len(1056)] //3 rewards of 352 bytes each
+        #[max_len(972)] //3 rewards of 324 bytes each
         pub rewards: Vec<Reward>,
     }
 
     impl Project {
         pub const ACCOUNT_LEN: usize =
-            32 + 64 + 128 + 3000 + 4 + 4 + 8 + 1 + 2 + 32 + (3 * (64 + 256 + 4)); // Length of the account 4349 bytes
+            32 + (4 + 64) + (4 + 128) + (4 + 3000) + 4 + 4 + 8 + 1 + 2 + (4 + 3 * (64 + 256 + 4)); // Length of the account 4231 bytes
     }
 
     #[derive(AnchorSerialize, AnchorDeserialize, Clone, InitSpace)]
@@ -54,8 +54,24 @@ pub mod user {
     use anchor_lang::prelude::*;
 
     #[account]
+    #[derive(InitSpace)]
     pub struct User {
-        //Not implemented
+        pub wallet_pub_key: Pubkey,
+
+        #[max_len(64)]
+        name: String,
+
+        #[max_len(128)]
+        avatar_url: String,
+
+        #[max_len(256)]
+        description: String,
+
+        created_project_counter: u16,
+    }
+
+    impl User {
+        pub const ACCOUNT_LEN: usize = 32 + 64 + 128 + 256 + 2; // Length of the account 482 bytes
     }
 }
 
@@ -64,6 +80,14 @@ pub mod contribution {
 
     #[account]
     pub struct Contribution {
-        //Not implemented
+        pub amount: u32,
+
+        pub user_pub_key: Pubkey,
+
+        pub project_pub_key: Pubkey,
+    }
+
+    impl Contribution {
+        pub const ACCOUNT_LEN: usize = 4 + 32 + 32; // Length of the account 68 bytes
     }
 }
