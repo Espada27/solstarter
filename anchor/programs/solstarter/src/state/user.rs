@@ -6,16 +6,15 @@ pub struct User {
     pub wallet_pubkey: Pubkey,
 
     #[max_len(64)]
-    name: String,
+    pub name: String,
 
     #[max_len(128)]
-    avatar_url: String,
+    pub avatar_url: String,
 
     #[max_len(256)]
-    description: String,
+    pub bio: String,
 
-    created_project_counter: u16,
+    pub created_project_counter: u16,
 }
 
-impl User {
-}
+impl User {}
