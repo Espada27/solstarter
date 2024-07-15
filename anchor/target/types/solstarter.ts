@@ -5,7 +5,7 @@
  * IDL can be found at `target/idl/solstarter.json`.
  */
 export type Solstarter = {
-  "address": "44Mp1yYBeNidNZJzzqhW5E7zoS7KWTX7AfYgAv69BfHP",
+  "address": "EPYqwH4n7Eu8n8NAwr1PorvsNJsjLfJDaQ7Q9QXxX8fX",
   "metadata": {
     "name": "solstarter",
     "version": "0.1.0",
