@@ -25,8 +25,7 @@ pub struct Project {
 }
 
 impl Project {
-    pub const ACCOUNT_LEN: usize =
-        32 + (4 + 64) + (4 + 128) + (4 + 3000) + 4 + 4 + 8 + 1 + 2 + (4 + 3 * (64 + 256 + 4)); // Length of the account 4231 bytes
+   
 }
 
 #[derive(AnchorSerialize, AnchorDeserialize, Clone, InitSpace)]

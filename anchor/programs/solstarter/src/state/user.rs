@@ -18,5 +18,4 @@ pub struct User {
 }
 
 impl User {
-    pub const ACCOUNT_LEN: usize = 32 + 64 + 128 + 256 + 2; // Length of the account 482 bytes
 }

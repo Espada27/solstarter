@@ -10,5 +10,4 @@ pub struct Contribution {
 }
 
 impl Contribution {
-    pub const ACCOUNT_LEN: usize = 4 + 32 + 32; // Length of the account 68 bytes
 }
