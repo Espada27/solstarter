@@ -18,6 +18,7 @@ pub fn create_project(
     ctx.accounts.project.project_description = project_description;
     ctx.accounts.project.goal_amount = goal_amount;
     ctx.accounts.project.raised_amount = 0;
+    ctx.accounts.project.created_time = Clock::get().unwrap().unix_timestamp;
     ctx.accounts.project.end_time = end_time;
     ctx.accounts.project.status = Status::Ongoing;
     
