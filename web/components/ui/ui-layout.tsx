@@ -25,8 +25,8 @@ export function UiLayout({
   const pathname = usePathname();
 
   return (
-    <div className="h-full flex flex-col">
-      <div className="navbar bg-base-300 text-neutral-content flex-col md:flex-row space-y-2 md:space-y-0">
+    <div className="h-full w-full flex flex-col text-textColor-main dark:text-textColor-main-dark">
+      <div className="navbar bg-base-300  flex-col md:flex-row space-y-2 md:space-y-0">
         <div className="flex-1">
           <Link className="btn btn-ghost normal-case text-xl" href="/">
             <p>SOLSTARTER</p>
