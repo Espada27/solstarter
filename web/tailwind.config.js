@@ -11,7 +11,20 @@ module.exports = {
     ...createGlobPatternsForDependencies(__dirname),
   ],
   theme: {
-    extend: {},
+    extend: {
+      colors: {
+        "mainColor":"#FFFFFF",
+        "mainColorDark":"#0a0a0a", //@0a0a0a
+        "mainButtonDark":"#fafafa",
+        "secondColor":"#EFEFEF",
+        "secondColorDark":"#525252",
+        "accentColor":"#445E85", 
+        "textColor-main":"#000000",
+        "textColor-second":"#707070",
+        "textColor-main-dark":"#FFFFFF",
+        "textColor-second-dark":"#909090",
+      }
+    },
   },
   plugins: [require('daisyui')],
 };
