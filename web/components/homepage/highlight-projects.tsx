@@ -32,10 +32,10 @@ const HighlightProjects = (props: Props) => {
 
     return (
         <div className='flex justify-center items-center w-full min-h-full overflow-x-auto md:overflow-x-hidden'>
-            {props.projects.map((project, index) => (
+            {props.projects.slice(0,3).map((project, index) => (
                 <div key={index} className='p-4'>
-                    <Link href={`/project/${project.id}`}className='relative w-full'>
-                        <Image src={project.pictureURL} alt='collection picture' width={400} height={400}  className='object-cover aspect-square mx-auto'/>
+                    <Link href={`/project/${project.pubkey}`}className='relative w-full'>
+                        <Image src={project.image_url} alt='collection picture' width={400} height={400}  className='object-cover aspect-square mx-auto'/>
                         <div className='mx-auto absolute md:w-3/4 lg:w-2/3 bottom-0 lg:bottom-4 left-0 lg:left-4 flex flex-col justify-start items-start gap-2 bg-accentColor/70  text-white p-4'>
                             <h3 className='text-h3 lg:text-h2'>{project.name}</h3>
                         </div>
