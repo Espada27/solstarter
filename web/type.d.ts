@@ -6,14 +6,23 @@ type Reward ={
 }
 
 type Project ={
-    id:string
+    pubkey:string // should be pda address
+    owner_pubkey:string
     name:string
-    pictureURL:string
-    short_description:string
-    amount_goal:number
-    amount_raised:number
+    image_url:string
+    project_description:string
+    goal_amount:number
+    raised_amount:number
     end_time:number
     status:ProjectStatus
     contribution_counter:number
     rewards:Reward[]
+}
+
+type User ={
+    wallet_pubkey:string
+    name:string
+    avatar_url:string
+    bio:string
+    created_project_counter:number
 }
