@@ -16,6 +16,7 @@ pub struct Project {
 
     pub goal_amount: u32,
     pub raised_amount: u32,
+    pub created_time: i64,
     pub end_time: u64,
     pub status: Status,
     pub contribution_counter: u16,
@@ -24,9 +25,7 @@ pub struct Project {
     pub rewards: Vec<Reward>,
 }
 
-impl Project {
-   
-}
+impl Project {}
 
 #[derive(AnchorSerialize, AnchorDeserialize, Clone, InitSpace)]
 pub struct Reward {
