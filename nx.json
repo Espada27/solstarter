@@ -1,5 +1,4 @@
 {
-  "cacheDirectory": "./tmp/mycache",
   "$schema": "./node_modules/nx/schemas/nx-schema.json",
   "namedInputs": {
     "default": ["{projectRoot}/**/*", "sharedGlobals"],
@@ -17,7 +16,7 @@
   },
   "targetDefaults": {
     "@nx/next:build": {
-      "cache": false,
+      "cache": true,
       "dependsOn": ["^build"],
       "inputs": ["production", "^production"]
     },
