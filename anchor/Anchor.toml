@@ -1,12 +1,12 @@
 [toolchain]
-anchor_version = "0.30.0"
+anchor_version = "0.30.1"
 
 [features]
 resolution = true
 skip-lint = false
 
 [programs.localnet]
-solstarter = "EPYqwH4n7Eu8n8NAwr1PorvsNJsjLfJDaQ7Q9QXxX8fX"
+solstarter = "ETDF5ddfic9UWPDQv88MpGtoDHqqLAwn4yAAkZQAkqE5"
 
 [registry]
 url = "https://api.apr.dev"

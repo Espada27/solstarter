@@ -23,6 +23,10 @@ module.exports = {
         "textColor-second":"#707070",
         "textColor-main-dark":"#FFFFFF",
         "textColor-second-dark":"#909090",
+      },
+      backgroundImage:{
+        "gradient-custom-gray": "linear-gradient(to bottom, #5A5A5A,#1b1b1b)",
+        "gradient-custom-gray-dark": "linear-gradient(to bottom, #9ca3af,#d1d5db)",
       }
     },
   },

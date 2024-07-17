@@ -5,7 +5,7 @@
  * IDL can be found at `target/idl/solstarter.json`.
  */
 export type Solstarter = {
-  "address": "EPYqwH4n7Eu8n8NAwr1PorvsNJsjLfJDaQ7Q9QXxX8fX",
+  "address": "ETDF5ddfic9UWPDQv88MpGtoDHqqLAwn4yAAkZQAkqE5",
   "metadata": {
     "name": "solstarter",
     "version": "0.1.0",
@@ -14,19 +14,304 @@ export type Solstarter = {
   },
   "instructions": [
     {
-      "name": "greet",
+      "name": "createProject",
       "discriminator": [
-        203,
-        194,
-        3,
-        150,
-        228,
-        58,
+        148,
+        219,
         181,
-        62
+        42,
+        221,
+        114,
+        145,
+        190
       ],
-      "accounts": [],
-      "args": []
+      "accounts": [
+        {
+          "name": "user",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  117,
+                  115,
+                  101,
+                  114
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "signer"
+              }
+            ]
+          }
+        },
+        {
+          "name": "project",
+          "writable": true
+        },
+        {
+          "name": "signer",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "systemProgram",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": [
+        {
+          "name": "name",
+          "type": "string"
+        },
+        {
+          "name": "imageUrl",
+          "type": "string"
+        },
+        {
+          "name": "projectDescription",
+          "type": "string"
+        },
+        {
+          "name": "goalAmount",
+          "type": "u32"
+        },
+        {
+          "name": "endTime",
+          "type": "u64"
+        },
+        {
+          "name": "rewards",
+          "type": {
+            "vec": {
+              "defined": {
+                "name": "reward"
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "createUser",
+      "discriminator": [
+        108,
+        227,
+        130,
+        130,
+        252,
+        109,
+        75,
+        218
+      ],
+      "accounts": [
+        {
+          "name": "user",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  117,
+                  115,
+                  101,
+                  114
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "signer"
+              }
+            ]
+          }
+        },
+        {
+          "name": "signer",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "systemProgram",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": [
+        {
+          "name": "name",
+          "type": "string"
+        },
+        {
+          "name": "bio",
+          "type": "string"
+        },
+        {
+          "name": "avatarUrl",
+          "type": "string"
+        }
+      ]
+    }
+  ],
+  "accounts": [
+    {
+      "name": "project",
+      "discriminator": [
+        205,
+        168,
+        189,
+        202,
+        181,
+        247,
+        142,
+        19
+      ]
+    },
+    {
+      "name": "user",
+      "discriminator": [
+        159,
+        117,
+        95,
+        227,
+        239,
+        151,
+        58,
+        236
+      ]
+    }
+  ],
+  "types": [
+    {
+      "name": "project",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "ownerPubkey",
+            "type": "pubkey"
+          },
+          {
+            "name": "name",
+            "type": "string"
+          },
+          {
+            "name": "imageUrl",
+            "type": "string"
+          },
+          {
+            "name": "projectDescription",
+            "type": "string"
+          },
+          {
+            "name": "goalAmount",
+            "type": "u32"
+          },
+          {
+            "name": "raisedAmount",
+            "type": "u32"
+          },
+          {
+            "name": "createdTime",
+            "type": "i64"
+          },
+          {
+            "name": "endTime",
+            "type": "u64"
+          },
+          {
+            "name": "status",
+            "type": {
+              "defined": {
+                "name": "status"
+              }
+            }
+          },
+          {
+            "name": "contributionCounter",
+            "type": "u16"
+          },
+          {
+            "name": "rewards",
+            "type": {
+              "vec": {
+                "defined": {
+                  "name": "reward"
+                }
+              }
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "reward",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "name",
+            "type": "string"
+          },
+          {
+            "name": "rewardDescription",
+            "type": "string"
+          },
+          {
+            "name": "rewardAmount",
+            "type": "u32"
+          }
+        ]
+      }
+    },
+    {
+      "name": "status",
+      "type": {
+        "kind": "enum",
+        "variants": [
+          {
+            "name": "draft"
+          },
+          {
+            "name": "ongoing"
+          },
+          {
+            "name": "completed"
+          },
+          {
+            "name": "abandoned"
+          }
+        ]
+      }
+    },
+    {
+      "name": "user",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "walletPubkey",
+            "type": "pubkey"
+          },
+          {
+            "name": "name",
+            "type": "string"
+          },
+          {
+            "name": "avatarUrl",
+            "type": "string"
+          },
+          {
+            "name": "bio",
+            "type": "string"
+          },
+          {
+            "name": "createdProjectCounter",
+            "type": "u16"
+          }
+        ]
+      }
     }
   ]
 };
