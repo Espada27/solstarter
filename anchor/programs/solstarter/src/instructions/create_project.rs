@@ -13,6 +13,7 @@ pub fn create_project(
     ) -> Result<()> {
 
     ctx.accounts.project.owner_pubkey = ctx.accounts.signer.key();
+    ctx.accounts.project.user_pubkey = ctx.accounts.user.key();
     ctx.accounts.project.name = name;
     ctx.accounts.project.image_url = image_url;
     ctx.accounts.project.project_description = project_description;

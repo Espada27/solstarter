@@ -4,6 +4,7 @@ use anchor_lang::prelude::*;
 #[derive(InitSpace)]
 pub struct Project {
     pub owner_pubkey: Pubkey,
+    pub user_pubkey: Pubkey,
 
     #[max_len(64)]
     pub name: String,
@@ -21,7 +22,7 @@ pub struct Project {
     pub status: Status,
     pub contribution_counter: u16,
 
-    #[max_len(972)] //3 rewards of 324 bytes each
+    #[max_len(3, 324)] //3 rewards of 324 bytes each
     pub rewards: Vec<Reward>,
 }
 
