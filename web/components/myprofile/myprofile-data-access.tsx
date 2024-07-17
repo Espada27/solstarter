@@ -9,7 +9,7 @@ import { useCluster } from '../cluster/cluster-data-access';
 import { useAnchorProvider } from '../solana/solana-provider';
 import { useTransactionToast } from '../ui/ui-layout';
 import { getSolstarterProgram, getSolstarterProgramId } from '../../../anchor/src';
-import { redirect } from 'next/navigation';
+import { redirect, useRouter } from 'next/navigation';
 
 
 interface CreateUserArgs {
@@ -23,6 +23,7 @@ interface CreateUserArgs {
 export function useSolstarterProgram() {
   const { connection } = useConnection();
   const { cluster } = useCluster();
+  const router = useRouter()
   const transactionToast = useTransactionToast();
   const provider = useAnchorProvider();
   const programId = useMemo(
@@ -65,7 +66,7 @@ export function useSolstarterProgram() {
     onSuccess: (signature) => {
       transactionToast(signature);
       usersAccounts.refetch();
-      redirect('/myprofile');
+      router.push('/myprofile');
     },
     onError: () => toast.error('Failed to run program'),
   });
