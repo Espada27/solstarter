@@ -60,7 +60,7 @@ export function useSolstarterProgram() {
       )
       // call of the method
       return await program.methods.createUser(name, bio, imageUrl)
-        .accounts({user:userEntryAddress}) // definition of the PDA address with the seed generated
+        .accountsPartial({user:userEntryAddress}) // definition of the PDA address with the seed generated
         .rpc(); // launch the transaction
     },
     onSuccess: (signature) => {
