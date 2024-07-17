@@ -14,6 +14,73 @@ export type Solstarter = {
   },
   "instructions": [
     {
+      "name": "addContribution",
+      "discriminator": [
+        115,
+        15,
+        193,
+        201,
+        25,
+        254,
+        227,
+        124
+      ],
+      "accounts": [
+        {
+          "name": "user",
+          "writable": true
+        },
+        {
+          "name": "project",
+          "writable": true
+        },
+        {
+          "name": "contribution",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  99,
+                  111,
+                  110,
+                  116,
+                  114,
+                  105,
+                  98,
+                  117,
+                  116,
+                  105,
+                  111,
+                  110
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "project"
+              }
+            ]
+          }
+        },
+        {
+          "name": "signer",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "systemProgram",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": [
+        {
+          "name": "amount",
+          "type": "u32"
+        }
+      ]
+    },
+    {
       "name": "createProject",
       "discriminator": [
         148,
@@ -156,6 +223,19 @@ export type Solstarter = {
   ],
   "accounts": [
     {
+      "name": "contribution",
+      "discriminator": [
+        182,
+        187,
+        14,
+        111,
+        72,
+        167,
+        242,
+        212
+      ]
+    },
+    {
       "name": "project",
       "discriminator": [
         205,
@@ -182,7 +262,34 @@ export type Solstarter = {
       ]
     }
   ],
+  "errors": [
+    {
+      "code": 6000,
+      "name": "projectNotOngoing",
+      "msg": "The project is not in the Ongoing status."
+    }
+  ],
   "types": [
+    {
+      "name": "contribution",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "amount",
+            "type": "u32"
+          },
+          {
+            "name": "userPubkey",
+            "type": "pubkey"
+          },
+          {
+            "name": "projectPubkey",
+            "type": "pubkey"
+          }
+        ]
+      }
+    },
     {
       "name": "project",
       "type": {

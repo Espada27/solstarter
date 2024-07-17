@@ -8,6 +8,73 @@
   },
   "instructions": [
     {
+      "name": "add_contribution",
+      "discriminator": [
+        115,
+        15,
+        193,
+        201,
+        25,
+        254,
+        227,
+        124
+      ],
+      "accounts": [
+        {
+          "name": "user",
+          "writable": true
+        },
+        {
+          "name": "project",
+          "writable": true
+        },
+        {
+          "name": "contribution",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  99,
+                  111,
+                  110,
+                  116,
+                  114,
+                  105,
+                  98,
+                  117,
+                  116,
+                  105,
+                  111,
+                  110
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "project"
+              }
+            ]
+          }
+        },
+        {
+          "name": "signer",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": [
+        {
+          "name": "amount",
+          "type": "u32"
+        }
+      ]
+    },
+    {
       "name": "create_project",
       "discriminator": [
         148,
@@ -150,6 +217,19 @@
   ],
   "accounts": [
     {
+      "name": "Contribution",
+      "discriminator": [
+        182,
+        187,
+        14,
+        111,
+        72,
+        167,
+        242,
+        212
+      ]
+    },
+    {
       "name": "Project",
       "discriminator": [
         205,
@@ -176,7 +256,34 @@
       ]
     }
   ],
+  "errors": [
+    {
+      "code": 6000,
+      "name": "ProjectNotOngoing",
+      "msg": "The project is not in the Ongoing status."
+    }
+  ],
   "types": [
+    {
+      "name": "Contribution",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "amount",
+            "type": "u32"
+          },
+          {
+            "name": "user_pubkey",
+            "type": "pubkey"
+          },
+          {
+            "name": "project_pubkey",
+            "type": "pubkey"
+          }
+        ]
+      }
+    },
     {
       "name": "Project",
       "type": {

@@ -2,6 +2,7 @@ use anchor_lang::prelude::*;
 
 pub mod instructions;
 pub mod state;
+pub mod errors;
 
 use crate::state::project::Reward;
 use instructions::*;
@@ -39,5 +40,9 @@ pub mod solstarter {
             end_time,
             rewards,
         )
+    }
+
+    pub fn add_contribution(ctx: Context<AddContribution>, amount: u32) -> Result<()> {
+        instructions::add_contribution(ctx, amount)
     }
 }

@@ -39,7 +39,7 @@ pub struct Reward {
     pub reward_amount: u32,
 }
 
-#[derive(Clone, InitSpace, AnchorSerialize, AnchorDeserialize)]
+#[derive(Clone, InitSpace, AnchorSerialize, AnchorDeserialize, PartialEq, Eq)]
 pub enum Status {
     Draft = 0,
     Ongoing = 1,
