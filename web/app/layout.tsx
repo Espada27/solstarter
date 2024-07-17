@@ -12,7 +12,7 @@ export const metadata = {
 const links: { label: string; path: string }[] = [
   { label: 'Projets', path: '/projects' },
   { label: 'Marché de récompenses', path: '/rewardsmarket' },
-  { label: 'Mon profil', path: '/myprofile' },
+  { label: 'Mon profil', path: '/myprofile' }
 ];
 
 export default function RootLayout({

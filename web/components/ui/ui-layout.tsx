@@ -5,7 +5,7 @@ import * as React from 'react';
 import { ReactNode, Suspense, useEffect, useRef } from 'react';
 
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { redirect, usePathname } from 'next/navigation';
 
 import { AccountChecker } from '../account/account-ui';
 import {
@@ -14,6 +14,7 @@ import {
   ExplorerLink,
 } from '../cluster/cluster-ui';
 import toast, { Toaster } from 'react-hot-toast';
+import { useWallet } from '@solana/wallet-adapter-react';
 
 export function UiLayout({
   children,
@@ -22,11 +23,21 @@ export function UiLayout({
   children: ReactNode;
   links: { label: string; path: string }[];
 }) {
+
+  //* LOCAL STATE
   const pathname = usePathname();
+  const { publicKey } = useWallet();
+  // redirect to homepage if wallet is disconnected
+  useEffect(()=>{
+    if (!publicKey && pathname !== '/') {
+      return redirect(`/`);
+    }
+  },[publicKey])
+  
 
   return (
     <div className="h-full w-full flex flex-col text-textColor-main dark:text-textColor-main-dark">
-      <div className="navbar bg-base-300  flex-col md:flex-row space-y-2 md:space-y-0 fixed top-0 left-0">
+      <div className="navbar bg-base-300  flex-col md:flex-row space-y-2 md:space-y-0 fixed top-0 left-0 z-20">
         <div className="flex-1">
           <Link className="btn btn-ghost normal-case text-xl" href="/">
             <p>SOLSTARTER</p>
@@ -53,7 +64,7 @@ export function UiLayout({
       <ClusterChecker>
         <AccountChecker />
       </ClusterChecker>
-      <div className="mx-4 my-14">
+      <div className="mx-4 my-24 min-h-screen">
         <Suspense
           fallback={
             <div className="text-center my-32">
