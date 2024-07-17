@@ -48,7 +48,7 @@ pub struct CreateProject<'info> {
         space = 8 + Project::INIT_SPACE, 
         seeds = [
             b"project", 
-            signer.key().as_ref(),
+            user.key().as_ref(),
             &(user.created_project_counter + 1).to_le_bytes(),
         ],
         bump
