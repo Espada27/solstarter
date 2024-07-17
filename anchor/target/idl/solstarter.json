@@ -1,5 +1,5 @@
 {
-  "address": "ETDF5ddfic9UWPDQv88MpGtoDHqqLAwn4yAAkZQAkqE5",
+  "address": "4CZvAmKEr5XaKasMXja4nG4WkXsyDzg94Bz1927bx1EY",
   "metadata": {
     "name": "solstarter",
     "version": "0.1.0",
@@ -184,6 +184,10 @@
         "fields": [
           {
             "name": "owner_pubkey",
+            "type": "pubkey"
+          },
+          {
+            "name": "user_pubkey",
             "type": "pubkey"
           },
           {

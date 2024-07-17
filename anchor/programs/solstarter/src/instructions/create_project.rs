@@ -13,6 +13,7 @@ pub fn create_project(
     ) -> Result<()> {
 
     ctx.accounts.project.owner_pubkey = ctx.accounts.signer.key();
+    ctx.accounts.project.user_pubkey = ctx.accounts.user.key();
     ctx.accounts.project.name = name;
     ctx.accounts.project.image_url = image_url;
     ctx.accounts.project.project_description = project_description;
@@ -48,7 +49,7 @@ pub struct CreateProject<'info> {
         space = 8 + Project::INIT_SPACE, 
         seeds = [
             b"project", 
-            signer.key().as_ref(),
+            user.key().as_ref(),
             &(user.created_project_counter + 1).to_le_bytes(),
         ],
         bump

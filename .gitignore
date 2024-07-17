@@ -32,7 +32,7 @@ testem.log
 # System Files
 .DS_Store
 Thumbs.db
-.nx/cache
+.nx
 # Next.js
 .next
 out
@@ -44,6 +44,7 @@ anchor/target/sbf-solana-solana
 anchor/target/.rustc_info.json
 !anchor/target/idl/*.json
 !anchor/target/types/*.ts
+anchor/*.lock
 test-ledger
 .yarn
 # npm
