@@ -49,7 +49,7 @@ describe("solstarter", () => {
     const seeds = [
       Buffer.from("project"),
       userPubkey.toBuffer(),
-      new anchor.BN(userProjectCounter + 1).toArrayLike(Buffer, "le", 2),
+      new anchor.BN(userProjectCounter + 1).toArray('le', 2),
     ];
 
     // Project Pda address research with seeds
