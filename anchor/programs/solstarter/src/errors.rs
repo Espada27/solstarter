@@ -5,3 +5,9 @@ pub enum ProjectError {
     #[msg("The project is not in the Ongoing status.")]
     ProjectNotOngoing,
 }
+
+#[error_code]
+pub enum TransferError {
+    #[msg("Transfer of funds failed")]
+    TransferFailed,
+}
