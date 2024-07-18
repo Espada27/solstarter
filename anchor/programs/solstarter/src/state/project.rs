@@ -18,7 +18,7 @@ pub struct Project {
     pub goal_amount: u32,
     pub raised_amount: u32,
     pub created_time: i64,
-    pub end_time: u64,
+    pub end_time: i64,
     pub status: Status,
     pub contribution_counter: u16,
 

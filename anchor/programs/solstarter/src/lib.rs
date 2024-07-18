@@ -27,7 +27,7 @@ pub mod solstarter {
         image_url: String,
         project_description: String,
         goal_amount: u32,
-        end_time: u64,
+        end_time: i64,
         rewards: Vec<Reward>,
     ) -> Result<()> {
         instructions::create_project(
