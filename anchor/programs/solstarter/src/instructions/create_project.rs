@@ -8,7 +8,7 @@ pub fn create_project(
         image_url: String,
         project_description: String,
         goal_amount: u32,
-        end_time: u64,
+        end_time: i64,
         rewards: Vec<Reward>,
     ) -> Result<()> {
 
@@ -22,7 +22,6 @@ pub fn create_project(
     ctx.accounts.project.created_time = Clock::get()?.unix_timestamp;
     ctx.accounts.project.end_time = end_time;
     ctx.accounts.project.status = Status::Ongoing;
-    
     ctx.accounts.project.rewards = rewards;
 
     // Increment project user counter
@@ -33,14 +32,7 @@ pub fn create_project(
 
 #[derive(Accounts)]
 pub struct CreateProject<'info> {
-    #[account(
-        mut, 
-        seeds = [
-            b"user", 
-            signer.key().as_ref(),
-        ], 
-        bump
-    )]
+    #[account(mut)]
     pub user: Account<'info, User>,
 
     #[account(

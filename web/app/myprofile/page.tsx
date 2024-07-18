@@ -1,11 +1,5 @@
-import React from 'react'
+import { NoWalletConnected } from '@/components/myprofile/myprofile-feature';
 
-// type Props = {}
-
-const MyProfilPage = (/*props: Props*/) => {
-  return (
-    <div>MyProfilPage</div>
-  )
+export default function Page() {
+  return <NoWalletConnected />;
 }
-
-export default MyProfilPage

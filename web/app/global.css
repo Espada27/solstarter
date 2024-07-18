@@ -8,7 +8,7 @@ body {
 }
 
 .wallet-adapter-button-trigger {
-  background: rgb(100, 26, 230) !important;
+  background: rgb(68, 94, 133) !important;
   border-radius: 8px !important;
   padding-left: 16px !important;
   padding-right: 16px !important;
@@ -16,4 +16,12 @@ body {
 .wallet-adapter-dropdown-list,
 .wallet-adapter-button {
   font-family: inherit !important;
+}
+
+.halo-effect {
+  background-image: radial-gradient(circle 200px at center top, rgba(71, 85, 105, 0.3), transparent);
+}
+
+.halo-effect-dark {
+  background-image: radial-gradient(circle 200px at center top, rgba(71, 85, 105, 0.5), transparent);
 }

@@ -23,7 +23,7 @@ const MainButtonLabelAsync = (props: Props) => {
         </p>
       </div>
       :  
-      props.label.toUpperCase()}
+      props.label}
     </div>
   )
 }
