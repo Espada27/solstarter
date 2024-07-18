@@ -71,7 +71,7 @@ describe("solstarter", () => {
           projectData.name,
           projectData.image_url,
           projectData.project_description,
-          Math.floor(projectData.created_time / 1000),
+          new BN(Math.floor(projectData.created_time / 1000)),
           new BN(Math.floor(projectData.end_time / 1000)),
           serializedRewards
         )
@@ -92,7 +92,9 @@ describe("solstarter", () => {
 
   let wallet1, wallet2: Keypair;	// owners userPda1 and userPda2
   let userPk1, userPk2: PublicKey;	// userPda1 and userPda2
-  let projectPk1, projectPk2, projectPk3: PublicKey;	// projectPda1, projectPda2 and projectPda3
+  let projectPk1, projectPk2, projectPk3: PublicKey;	// projectPda1, projectPda2 and projectPda3 
+  let fetchedUser1, fetchedUser2;
+
 
   it("should create 2 new user account", async () => {
     // New wallet + airdrop
@@ -104,8 +106,8 @@ describe("solstarter", () => {
     userPk2 = await create_user_pda(userData2, wallet2);
 
     // Fetch user1 and user2
-    const fetchedUser1 = await program.account.user.fetch(userPk1);
-    const fetchedUser2 = await program.account.user.fetch(userPk2);
+    fetchedUser1 = await program.account.user.fetch(userPk1);
+    fetchedUser2 = await program.account.user.fetch(userPk2);
 
     // Check if the data is correct
     expect(fetchedUser1.walletPubkey.toString()).toEqual(wallet1.publicKey.toString());
@@ -121,20 +123,20 @@ describe("solstarter", () => {
     expect(fetchedUser2.createdProjectCounter).toEqual(0);
   });
 
-  it("should create 3 new projects", async () => {
+  it("should create first project for user 1", async () => {
     
-    //Fetch user1 and user2
-    let fetchedUser1 = await program.account.user.fetch(userPk1);
-
     projectPk1 = await create_project_pda(
       projectData1,
       fetchedUser1.createdProjectCounter,
       userPk1,
       wallet1
     );
+  });
+  
+  it("should create second project for user 1 => counter + 1", async () => {
 
     // Update user 1 datas
-    fetchedUser1 = await program.account.user.fetch(userPk1);
+    fetchedUser1 = await program.account.user.fetch(userPk1); // project counter should be = 1
 
     projectPk2 = await create_project_pda(
       projectData2,
@@ -142,8 +144,10 @@ describe("solstarter", () => {
       userPk1,
       wallet1
     );
+  });
 
-    const fetchedUser2 = await program.account.user.fetch(userPk2);
+  it("should create first project for user 2", async () => {
+    fetchedUser2 = await program.account.user.fetch(userPk2);
 
     projectPk3 = await create_project_pda(
       projectData3,
@@ -151,6 +155,5 @@ describe("solstarter", () => {
       userPk2,
       wallet2
     );
-
   });
 });
