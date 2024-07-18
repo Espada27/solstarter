@@ -7,7 +7,7 @@ pub mod errors;
 use crate::state::project::Reward;
 use instructions::*;
 
-declare_id!("ETDF5ddfic9UWPDQv88MpGtoDHqqLAwn4yAAkZQAkqE5");
+declare_id!("EPYqwH4n7Eu8n8NAwr1PorvsNJsjLfJDaQ7Q9QXxX8fX");
 
 #[program]
 pub mod solstarter {
@@ -27,7 +27,7 @@ pub mod solstarter {
         name: String,
         image_url: String,
         project_description: String,
-        goal_amount: u32,
+        goal_amount: u64,
         end_time: i64,
         rewards: Vec<Reward>,
     ) -> Result<()> {
@@ -42,7 +42,7 @@ pub mod solstarter {
         )
     }
 
-    pub fn add_contribution(ctx: Context<AddContribution>, amount: u32) -> Result<()> {
+    pub fn add_contribution(ctx: Context<AddContribution>, amount: u64) -> Result<()> {
         instructions::add_contribution(ctx, amount)
     }
 }

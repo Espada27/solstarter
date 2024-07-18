@@ -5,7 +5,7 @@
  * IDL can be found at `target/idl/solstarter.json`.
  */
 export type Solstarter = {
-  "address": "4CZvAmKEr5XaKasMXja4nG4WkXsyDzg94Bz1927bx1EY",
+  "address": "EPYqwH4n7Eu8n8NAwr1PorvsNJsjLfJDaQ7Q9QXxX8fX",
   "metadata": {
     "name": "solstarter",
     "version": "0.1.0",
@@ -59,6 +59,10 @@ export type Solstarter = {
               {
                 "kind": "account",
                 "path": "project"
+              },
+              {
+                "kind": "account",
+                "path": "user"
               }
             ]
           }
@@ -76,7 +80,7 @@ export type Solstarter = {
       "args": [
         {
           "name": "amount",
-          "type": "u32"
+          "type": "u64"
         }
       ]
     },
@@ -95,24 +99,7 @@ export type Solstarter = {
       "accounts": [
         {
           "name": "user",
-          "writable": true,
-          "pda": {
-            "seeds": [
-              {
-                "kind": "const",
-                "value": [
-                  117,
-                  115,
-                  101,
-                  114
-                ]
-              },
-              {
-                "kind": "account",
-                "path": "signer"
-              }
-            ]
-          }
+          "writable": true
         },
         {
           "name": "project",
@@ -143,11 +130,11 @@ export type Solstarter = {
         },
         {
           "name": "goalAmount",
-          "type": "u32"
+          "type": "u64"
         },
         {
           "name": "endTime",
-          "type": "u64"
+          "type": "i64"
         },
         {
           "name": "rewards",
@@ -265,8 +252,8 @@ export type Solstarter = {
   "errors": [
     {
       "code": 6000,
-      "name": "projectNotOngoing",
-      "msg": "The project is not in the Ongoing status."
+      "name": "transferFailed",
+      "msg": "Transfer of funds failed"
     }
   ],
   "types": [
@@ -277,7 +264,7 @@ export type Solstarter = {
         "fields": [
           {
             "name": "amount",
-            "type": "u32"
+            "type": "u64"
           },
           {
             "name": "userPubkey",
@@ -317,11 +304,11 @@ export type Solstarter = {
           },
           {
             "name": "goalAmount",
-            "type": "u32"
+            "type": "u64"
           },
           {
             "name": "raisedAmount",
-            "type": "u32"
+            "type": "u64"
           },
           {
             "name": "createdTime",
@@ -329,7 +316,7 @@ export type Solstarter = {
           },
           {
             "name": "endTime",
-            "type": "u64"
+            "type": "i64"
           },
           {
             "name": "status",
