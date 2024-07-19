@@ -35,4 +35,10 @@ export type User = {
     bio: string
     created_project_counter: number
   }
+
+  export type Contribution = {
+    amount: number
+    user_pubkey: string
+    project_pubkey: string
+  }
   

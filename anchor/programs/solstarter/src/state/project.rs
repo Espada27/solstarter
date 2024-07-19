@@ -15,8 +15,8 @@ pub struct Project {
     #[max_len(3000)]
     pub project_description: String,
 
-    pub goal_amount: u32,
-    pub raised_amount: u32,
+    pub goal_amount: u64,
+    pub raised_amount: u64,
     pub created_time: i64,
     pub end_time: i64,
     pub status: Status,
@@ -39,7 +39,7 @@ pub struct Reward {
     pub reward_amount: u32,
 }
 
-#[derive(Clone, InitSpace, AnchorSerialize, AnchorDeserialize)]
+#[derive(Clone, InitSpace, AnchorSerialize, AnchorDeserialize, PartialEq, Eq)]
 pub enum Status {
     Draft = 0,
     Ongoing = 1,
