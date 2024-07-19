@@ -5,10 +5,18 @@ use crate::errors::{ProjectError, TransferError};
 use crate::state::{Contribution, Project, Status, User};
 
 pub fn add_contribution(ctx: Context<AddContribution>, amount: u64) -> Result<()> {
+    validate_authority(&ctx)?;
     validate_project_status(&ctx.accounts.project)?;
     transfer_funds(&ctx, amount)?;
-    update_contribution(&mut ctx.accounts.contribution, &ctx.accounts.user, &ctx.accounts.project, amount)?;
+    update_contribution(&mut ctx.accounts.contribution, &ctx.accounts.user, &mut ctx.accounts.project, amount)?;
     update_project(&mut ctx.accounts.project, amount)?;
+    Ok(())
+}
+
+fn validate_authority(ctx: &Context<AddContribution>) -> Result<()> {
+    if &ctx.accounts.signer.key() != &ctx.accounts.user.wallet_pubkey {
+        return Err(TransferError::WrongAuthority.into());
+    }
     Ok(())
 }
 
@@ -41,7 +49,7 @@ fn transfer_funds(ctx: &Context<AddContribution>, amount: u64) -> Result<()> {
 fn update_contribution(
     contribution: &mut Account<Contribution>,
     user: &Account<User>,
-    project: &Account<Project>,
+    project: &mut Account<Project>,
     amount: u64
 ) -> Result<()> {
     if contribution.user_pubkey == Pubkey::default() {
@@ -55,18 +63,18 @@ fn update_contribution(
 fn initialize_contribution(
     contribution: &mut Account<Contribution>,
     user: &Account<User>,
-    project: &Account<Project>,
+    project: &mut Account<Project>,
     amount: u64
 ) -> Result<()> {
     contribution.user_pubkey = *user.to_account_info().key;
     contribution.project_pubkey = *project.to_account_info().key;
     contribution.amount = amount;
+    project.contribution_counter += 1;
     Ok(())
 }
 
 fn update_project(project: &mut Account<Project>, amount: u64) -> Result<()> {
     project.raised_amount += amount;
-    project.contribution_counter += 1;
     Ok(())
 }
 

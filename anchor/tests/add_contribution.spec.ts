@@ -1,23 +1,17 @@
 import * as anchor from "@coral-xyz//anchor";
 import { BN, Program } from "@coral-xyz//anchor";
 import { Solstarter } from "../src";
-import { PublicKey, Keypair, SystemProgram, LAMPORTS_PER_SOL, TransactionConfirmationStrategy, BaseTransactionConfirmationStrategy, BlockheightBasedTransactionConfirmationStrategy } from "@solana/web3.js";
+import { PublicKey, Keypair, SystemProgram, LAMPORTS_PER_SOL} from "@solana/web3.js";
 import { Project, User } from "./types";
-import { userData1, projectData1} from "./datasets";
+import { userData1, projectData1 } from "./datasets";
 import { confirmTransaction } from "./testUtils";
 
 describe("add_contribution", () => {
-  // Configure the client to use the local cluster.
   const provider = anchor.AnchorProvider.env();
   const systemProgram = anchor.web3.SystemProgram;
   anchor.setProvider(provider);
 
   const program = anchor.workspace.Solstarter as Program<Solstarter>;
-
-  /*let user: Keypair;
-  let project: Keypair;
-  let contribution: PublicKey;
-  let projectAccount: any;*/
 
   //
   // Init functions
@@ -25,7 +19,7 @@ describe("add_contribution", () => {
   async function create_wallet_with_sol(): Promise<Keypair> {
     const wallet = new Keypair()
     const tx = await program.provider.connection.requestAirdrop(wallet.publicKey, 1000 * LAMPORTS_PER_SOL);
-    await program.provider.connection.confirmTransaction(tx);
+    await confirmTransaction(program, tx);
     return wallet
   }
 
@@ -46,8 +40,8 @@ describe("add_contribution", () => {
       })
       .signers([wallet])
       .rpc();
-    await program.provider.connection.confirmTransaction(createUserTx);
-    return userPdaPublicKey;
+      await confirmTransaction(program, createUserTx);
+      return userPdaPublicKey;
   }
 
   // Create a new project
@@ -96,7 +90,7 @@ describe("add_contribution", () => {
       .signers([wallet])
       .rpc();
 
-    await program.provider.connection.confirmTransaction(createTx);
+      await confirmTransaction(program, createTx);
 
     return projectPdaPublicKey;
   }
@@ -143,10 +137,68 @@ describe("add_contribution", () => {
   });
 
   it("should update an existing contribution", async () => {
-    
+    const userWallet = await create_wallet_with_sol();
+    const userPdaKey = await create_user_pda(userData1, userWallet);
+    const projectPdaKey = await create_project_pda(projectData1, userData1.created_project_counter, userPdaKey, userWallet)
+    const contributionPdaKey = await create_contribution_pda(userPdaKey, projectPdaKey);
+    const depositAmount = new BN(100 * LAMPORTS_PER_SOL);
+
+    const tx = await program.methods.addContribution(depositAmount)
+      .accountsPartial({
+        user: userPdaKey,
+        project: projectPdaKey,
+        contribution: contributionPdaKey,
+        signer: userWallet.publicKey,
+        systemProgram: SystemProgram.programId,
+      })
+      .signers([userWallet])
+      .rpc();
+
+    await confirmTransaction(program, tx);
+
+    const contributionAccountBefore = await program.account.contribution.fetch(contributionPdaKey);
+
+    const tx2 = await program.methods.addContribution(depositAmount)
+      .accountsPartial({
+        user: userPdaKey,
+        project: projectPdaKey,
+        contribution: contributionPdaKey,
+        signer: userWallet.publicKey,
+        systemProgram: SystemProgram.programId,
+      })
+      .signers([userWallet])
+      .rpc();
+
+    await confirmTransaction(program, tx2);
+
+    const contributionAccountAfter = await program.account.contribution.fetch(contributionPdaKey);
+
+    expect(contributionAccountAfter.amount.toString()).toEqual((contributionAccountBefore.amount.add(depositAmount)).toString());
   });
 
-  it("should fail when project is not ongoing", async () => {
-    
+  it("should fail when the signer is not the user", async () => {
+    const ownerWallet = await create_wallet_with_sol();
+    const aliceWallet = await create_wallet_with_sol();
+    const userPdaKey = await create_user_pda(userData1, ownerWallet);
+    const projectPdaKey = await create_project_pda(projectData1, userData1.created_project_counter, userPdaKey, ownerWallet)
+    const contributionPdaKey = await create_contribution_pda(userPdaKey, projectPdaKey);
+    const depositAmount = new BN(100 * LAMPORTS_PER_SOL);
+    const expectedError = "AnchorError occurred. Error Code: WrongAuthority. Error Number: 6001. Error Message: Signer not allowed.";
+
+      await expect(program.methods.addContribution(depositAmount)
+      .accountsPartial({
+        user: userPdaKey,
+        project: projectPdaKey,
+        contribution: contributionPdaKey,
+        signer: aliceWallet.publicKey,
+        systemProgram: SystemProgram.programId,
+      })
+      .signers([aliceWallet])
+      .rpc())
+      .rejects.toThrow(expectedError)
+  });
+
+  it("should fail when contributing to a project that is not ongoing", async () => {
+    //TODO Contract does not implement yet the status change
   });
 });

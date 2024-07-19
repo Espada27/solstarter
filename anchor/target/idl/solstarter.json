@@ -248,6 +248,11 @@
       "code": 6000,
       "name": "TransferFailed",
       "msg": "Transfer of funds failed"
+    },
+    {
+      "code": 6001,
+      "name": "WrongAuthority",
+      "msg": "Signer not allowed"
     }
   ],
   "types": [

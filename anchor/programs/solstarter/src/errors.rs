@@ -10,4 +10,6 @@ pub enum ProjectError {
 pub enum TransferError {
     #[msg("Transfer of funds failed")]
     TransferFailed,
+    #[msg("Signer not allowed")]
+    WrongAuthority,
 }
