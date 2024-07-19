@@ -5,7 +5,7 @@
  * IDL can be found at `target/idl/solstarter.json`.
  */
 export type Solstarter = {
-  "address": "4CZvAmKEr5XaKasMXja4nG4WkXsyDzg94Bz1927bx1EY",
+  "address": "DSwP4xKkeeV7g1T8rdJeQnSNitBWvywWPt3WngXHfKXk",
   "metadata": {
     "name": "solstarter",
     "version": "0.1.0",
@@ -28,24 +28,7 @@ export type Solstarter = {
       "accounts": [
         {
           "name": "user",
-          "writable": true,
-          "pda": {
-            "seeds": [
-              {
-                "kind": "const",
-                "value": [
-                  117,
-                  115,
-                  101,
-                  114
-                ]
-              },
-              {
-                "kind": "account",
-                "path": "signer"
-              }
-            ]
-          }
+          "writable": true
         },
         {
           "name": "project",
@@ -80,7 +63,7 @@ export type Solstarter = {
         },
         {
           "name": "endTime",
-          "type": "u64"
+          "type": "i64"
         },
         {
           "name": "rewards",
@@ -222,7 +205,7 @@ export type Solstarter = {
           },
           {
             "name": "endTime",
-            "type": "u64"
+            "type": "i64"
           },
           {
             "name": "status",

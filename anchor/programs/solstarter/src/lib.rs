@@ -6,7 +6,7 @@ pub mod state;
 use crate::state::project::Reward;
 use instructions::*;
 
-declare_id!("ETDF5ddfic9UWPDQv88MpGtoDHqqLAwn4yAAkZQAkqE5");
+declare_id!("DSwP4xKkeeV7g1T8rdJeQnSNitBWvywWPt3WngXHfKXk");
 
 #[program]
 pub mod solstarter {

@@ -26,7 +26,7 @@ module.exports = {
       },
       backgroundImage:{
         "gradient-custom-gray": "linear-gradient(to bottom, #5A5A5A,#1b1b1b)",
-        "gradient-custom-gray-dark": "linear-gradient(to bottom, #9ca3af,#d1d5db)",
+        "gradient-custom-gray-dark": "linear-gradient(to bottom, #d1d5db,#e5e7eb)",
       }
     },
   },

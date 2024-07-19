@@ -24,7 +24,7 @@ export default function HomepageFeature() {
       <h3 className='text-2xl p-2 text-center'>Les plus gros succès</h3>
       <HighlightProjects projects={projects} />
       <div className='w-full md:w-1/4 mx-auto py-10'>
-        <Link href={"/"}><MainButtonLabel label='Proposer un projet'/></Link>
+        <Link href={"/createproject"}><MainButtonLabel label='Proposer un projet'/></Link>
       </div>
       <h3 className='text-lg text-center'>Contribuez, évaluez, réallouez</h3>
       <p className='text-textColor-second dark:text-textColor-second-dark text-center w-full md:w-1/2 mx-auto'>
