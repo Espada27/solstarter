@@ -3,6 +3,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import React, { useEffect } from 'react'
 import { useSolstarterProgram } from '../solstarter/solstarter-data-access'
+import { getSolFromLamports } from '@/utils/utilsFunctions'
 
 type Props = {
     project:Project

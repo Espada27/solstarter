@@ -11,6 +11,7 @@ import { useAnchorProvider } from '../solana/solana-provider';
 import { useTransactionToast } from '../ui/ui-layout';
 import { getSolstarterProgram, getSolstarterProgramId } from '../../../anchor/src';
 import { redirect, useRouter } from 'next/navigation';
+import { getLamportsFromSol } from '@/utils/utilsFunctions';
 
 interface CreateUserArgs {
   signer:PublicKey
@@ -97,7 +98,12 @@ export function useSolstarterProgram() {
     // function call from the program
     mutationFn: async ({userAccountPublicKey,name,image_url,project_description,goal_amount,end_time,rewards,userProjectCounter}) => { //the input needed by the program function
 
-      
+      // End time to unix timestamp conversion
+      const endTimeUnixTimestamp = Math.floor(new Date(end_time).getTime() / 1000);
+
+      // goal_amount is in SOL, we convert it to lamports
+      const lamportsAmount = getLamportsFromSol(goal_amount);
+
       // generation of the seeds for the PDA
       const [newProjectAddress] = await PublicKey.findProgramAddress(
         [
@@ -117,7 +123,7 @@ export function useSolstarterProgram() {
       }));
       
       // call of the method
-      return await program.methods.createProject(name, image_url, project_description, new BN(goal_amount), new BN(end_time), serializedRewards)
+      return await program.methods.createProject(name, image_url, project_description, new BN(lamportsAmount), new BN(endTimeUnixTimestamp), serializedRewards)
         .accountsPartial({user:userAccountPublicKey,project:newProjectAddress}) // definition of the PDA address with the seed generated
         .rpc(); // launch the transaction
 
