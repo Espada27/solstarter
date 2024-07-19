@@ -5,7 +5,7 @@
  * IDL can be found at `target/idl/solstarter.json`.
  */
 export type Solstarter = {
-  "address": "DSwP4xKkeeV7g1T8rdJeQnSNitBWvywWPt3WngXHfKXk",
+  "address": "EPYqwH4n7Eu8n8NAwr1PorvsNJsjLfJDaQ7Q9QXxX8fX",
   "metadata": {
     "name": "solstarter",
     "version": "0.1.0",
@@ -13,6 +13,77 @@ export type Solstarter = {
     "description": "Created with Anchor"
   },
   "instructions": [
+    {
+      "name": "addContribution",
+      "discriminator": [
+        115,
+        15,
+        193,
+        201,
+        25,
+        254,
+        227,
+        124
+      ],
+      "accounts": [
+        {
+          "name": "user",
+          "writable": true
+        },
+        {
+          "name": "project",
+          "writable": true
+        },
+        {
+          "name": "contribution",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  99,
+                  111,
+                  110,
+                  116,
+                  114,
+                  105,
+                  98,
+                  117,
+                  116,
+                  105,
+                  111,
+                  110
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "project"
+              },
+              {
+                "kind": "account",
+                "path": "user"
+              }
+            ]
+          }
+        },
+        {
+          "name": "signer",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "systemProgram",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": [
+        {
+          "name": "amount",
+          "type": "u64"
+        }
+      ]
+    },
     {
       "name": "createProject",
       "discriminator": [
@@ -59,7 +130,7 @@ export type Solstarter = {
         },
         {
           "name": "goalAmount",
-          "type": "u32"
+          "type": "u64"
         },
         {
           "name": "endTime",
@@ -139,6 +210,19 @@ export type Solstarter = {
   ],
   "accounts": [
     {
+      "name": "contribution",
+      "discriminator": [
+        182,
+        187,
+        14,
+        111,
+        72,
+        167,
+        242,
+        212
+      ]
+    },
+    {
       "name": "project",
       "discriminator": [
         205,
@@ -165,7 +249,34 @@ export type Solstarter = {
       ]
     }
   ],
+  "errors": [
+    {
+      "code": 6000,
+      "name": "transferFailed",
+      "msg": "Transfer of funds failed"
+    }
+  ],
   "types": [
+    {
+      "name": "contribution",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "amount",
+            "type": "u64"
+          },
+          {
+            "name": "userPubkey",
+            "type": "pubkey"
+          },
+          {
+            "name": "projectPubkey",
+            "type": "pubkey"
+          }
+        ]
+      }
+    },
     {
       "name": "project",
       "type": {
@@ -193,11 +304,11 @@ export type Solstarter = {
           },
           {
             "name": "goalAmount",
-            "type": "u32"
+            "type": "u64"
           },
           {
             "name": "raisedAmount",
-            "type": "u32"
+            "type": "u64"
           },
           {
             "name": "createdTime",

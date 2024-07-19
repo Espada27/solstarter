@@ -7,7 +7,7 @@ pub fn create_project(
         name: String,
         image_url: String,
         project_description: String,
-        goal_amount: u32,
+        goal_amount: u64,
         end_time: i64,
         rewards: Vec<Reward>,
     ) -> Result<()> {
