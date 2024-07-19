@@ -1,28 +1,34 @@
+type AccountWrapper<T> = {
+    publicKey: PublicKey;
+    account: T;
+};
+
 type Reward ={
-    id:string
     name:string
-    description:string
-    required_amount:number
+    rewardDescription:string
+    rewardAmount:number
 }
 
 type Project ={
     pubkey:string // should be pda address
-    owner_pubkey:string
+    ownerPubkey:PublicKey
+    userPubkey:PublicKey
     name:string
-    image_url:string
-    project_description:string
-    goal_amount:number
-    raised_amount:number
-    end_time:number
+    imageUrl:string
+    projectDescription:string
+    goalAmount:number
+    raisedAmount:number
+    endTime:Date
     status:ProjectStatus
-    contribution_counter:number
+    contributionCounter:number
     rewards:Reward[]
+    createdTime:Date
 }
 
 type User ={
-    wallet_pubkey:string
+    walletPubkey:string
     name:string
-    avatar_url:string
+    avatarUrl:string
     bio:string
-    created_project_counter:number
+    createdProjectCounter:number
 }
