@@ -6,6 +6,7 @@ import { useSolstarterProgram } from '../solstarter/solstarter-data-access'
 
 type Props = {
     project:Project
+    projectAccountPubkey?:string
 }
 
 const ProjectCard = (props: Props) => {
@@ -25,8 +26,8 @@ const ProjectCard = (props: Props) => {
   }, []);
 
   //* TEST
-  console.log("userToDisplay",userToDisplay);
-  console.log("usersAccounts",usersAccounts.data);
+  // console.log("userToDisplay",userToDisplay);
+  // console.log("usersAccounts",usersAccounts.data);
   console.log("props.project",props.project);
   
   
@@ -34,7 +35,7 @@ const ProjectCard = (props: Props) => {
 
   return (
     <div className='flex items-stretch dark:bg-gradient-custom-gray bg-gradient-custom-gray-dark p-[2px] rounded-xl'>
-      <Link href={`/project/${props.project.pubkey}`} className='flex flex-col justify-start items-start '>
+      <Link href={`/projects/${props.projectAccountPubkey}`} className='flex flex-col justify-start items-start '>
           <div className='w-[420px] h-[230px]'>
               <Image src={props.project.imageUrl} alt='project image' width={420} height={230}  className='object-cover aspect-video rounded-t-xl' />
           </div>

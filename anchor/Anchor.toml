@@ -6,7 +6,7 @@ resolution = true
 skip-lint = false
 
 [programs.localnet]
-solstarter = "EPYqwH4n7Eu8n8NAwr1PorvsNJsjLfJDaQ7Q9QXxX8fX"
+solstarter = "CDSfYDw1tgrc4y1NDuMn8dkTSKuz32XkPPh5dj4pgD6R"
 
 [registry]
 url = "https://api.apr.dev"

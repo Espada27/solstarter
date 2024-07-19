@@ -97,7 +97,6 @@ export function useSolstarterProgram() {
     // function call from the program
     mutationFn: async ({userAccountPublicKey,name,image_url,project_description,goal_amount,end_time,rewards,userProjectCounter}) => { //the input needed by the program function
 
-      
       // generation of the seeds for the PDA
       const [newProjectAddress] = await PublicKey.findProgramAddress(
         [
@@ -107,15 +106,12 @@ export function useSolstarterProgram() {
         ],
         programId
       )
-      console.log("counter",userProjectCounter);
-
       // Rewards serialization
       const serializedRewards = rewards.map((reward) => ({
         name: reward.name,
         rewardDescription: reward.rewardDescription,
         rewardAmount: reward.rewardAmount,
       }));
-      
       // call of the method
       return await program.methods.createProject(name, image_url, project_description, new BN(goal_amount), new BN(end_time), serializedRewards)
         .accountsPartial({user:userAccountPublicKey,project:newProjectAddress}) // definition of the PDA address with the seed generated

@@ -59,13 +59,13 @@ export function MyProfileFeature() {
   // default return (should never be displayed)
   return (
     <div className='w-full md:w-1/2 mx-auto mt-24'>
-          <GrayDisplayBlock padding='8'>
-            <div className="flex flex-col items-center justify-center gap-10 w-full">
-                <p>Il y a eu un souci...</p>
-                <Link href={'/'}><MainButtonLabel label="Retourner à l'accueil"/></Link>
-            </div>
-          </GrayDisplayBlock>
+      <GrayDisplayBlock padding='8'>
+        <div className="flex flex-col items-center justify-center gap-10 w-full">
+            <p>Il y a eu un souci...</p>
+            <Link href={'/'}><MainButtonLabel label="Retourner à l'accueil"/></Link>
         </div>
+      </GrayDisplayBlock>
+    </div>
   );
 
 }
@@ -89,7 +89,7 @@ export function UserProfile({user,userAccountPublicKey}:{user:any,userAccountPub
   },[userAccountPublicKey,projectsAccounts.data?.values])
 
   //* TEST
-  // console.log("projectsAccounts",projectsAccounts);
+  console.log("projectsAccounts",projectsAccounts);
   // console.log("userProjects",userProjects);
   // console.log("userAccountPublicKey",userAccountPublicKey);
   
@@ -97,7 +97,7 @@ export function UserProfile({user,userAccountPublicKey}:{user:any,userAccountPub
 
   return (
     <div className='flex flex-col items-center justify-start gap-4'>
-      <h2 className='text-xl mb-6'>Bonjour <span className='text-accentColor font-bold'>{user.name}</span> ! Voici votre profil solstarter</h2>
+      <h2 className='text-xl font-bold mb-6'>Bonjour <span className='text-accentColor font-bold'>{user.name}</span> ! Voici votre profil solstarter</h2>
       <GrayDisplayBlock padding='4'>
         <div className='grid grid-cols-3 gap-2 w-full'>
           <button className={`btn btn-ghost text-textColor-second  ${menuSelection === 'profile' ? "bg-gray-800 text-textColor-main dark:text-textColor-main-dark":""}`} onClick={()=>setMenuSelection("profile")}>Mon profil</button>

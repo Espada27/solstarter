@@ -24,7 +24,8 @@ const HighlightProjects = (props: Props) => {
       }
     }, [projectsAccounts.data]);
 
-    console.log(projectsToDisplay);
+    //* TEST
+    // console.log(projectsToDisplay);
     
     
     return (

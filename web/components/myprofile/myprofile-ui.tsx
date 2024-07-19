@@ -154,10 +154,15 @@ export function ProjectsTab({userProjects}:{userProjects:Project[]}){
         <div className='flex flex-col items-start justify-start gap-4 w-full'>
           <p className='text-textColor-main dark:text-textColor-main-dark text-xl font-bold'>Mes projets</p>
           {userProjects && userProjects.length === 0 && <p className="text-textColor-second dark:text-textColor-second-dark">Vous n&apos;avez pas encore créé de projet</p>}
-          {userProjects && userProjects.map((project:any, index:any) => (
-            // <p key={index}>{project.account.name}</p>
-            <ProjectCard project={project.account} key={index}/>
-          ))}
+          <div 
+            className="grid gap-20  w-full justify-center"
+            style={{gridTemplateColumns:"repeat(auto-fit,minmax(420px,auto)"}} // handle automatic number of column in responsive>
+          >
+            {userProjects && userProjects.map((project:any, index:any) => (
+              // <p key={index}>{project.account.name}</p>
+              <ProjectCard project={project.account} key={index}/>
+            ))}
+          </div>
         </div>
       </GrayDisplayBlock>
     )
