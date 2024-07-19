@@ -117,7 +117,7 @@ describe("add_contribution", () => {
         user: userPdaKey,
         project: projectPdaKey,
         contribution: contributionPdaKey,
-        signer: userWallet.publicKey,
+        walletPubkey: userWallet.publicKey,
         systemProgram: SystemProgram.programId,
       })
       .signers([userWallet])
@@ -148,7 +148,7 @@ describe("add_contribution", () => {
         user: userPdaKey,
         project: projectPdaKey,
         contribution: contributionPdaKey,
-        signer: userWallet.publicKey,
+        walletPubkey: userWallet.publicKey,
         systemProgram: SystemProgram.programId,
       })
       .signers([userWallet])
@@ -163,7 +163,7 @@ describe("add_contribution", () => {
         user: userPdaKey,
         project: projectPdaKey,
         contribution: contributionPdaKey,
-        signer: userWallet.publicKey,
+        walletPubkey: userWallet.publicKey,
         systemProgram: SystemProgram.programId,
       })
       .signers([userWallet])
@@ -183,14 +183,14 @@ describe("add_contribution", () => {
     const projectPdaKey = await create_project_pda(projectData1, userData1.created_project_counter, userPdaKey, ownerWallet)
     const contributionPdaKey = await create_contribution_pda(userPdaKey, projectPdaKey);
     const depositAmount = new BN(100 * LAMPORTS_PER_SOL);
-    const expectedError = "AnchorError occurred. Error Code: WrongAuthority. Error Number: 6001. Error Message: Signer not allowed.";
+    const expectedError = /^AnchorError caused by account: .*. Error Code: ConstraintHasOne. Error Number: .*. Error Message: A has one constraint was violated/;
 
       await expect(program.methods.addContribution(depositAmount)
       .accountsPartial({
         user: userPdaKey,
         project: projectPdaKey,
         contribution: contributionPdaKey,
-        signer: aliceWallet.publicKey,
+        walletPubkey: aliceWallet.publicKey,
         systemProgram: SystemProgram.programId,
       })
       .signers([aliceWallet])

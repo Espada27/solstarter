@@ -5,18 +5,10 @@ use crate::errors::{ProjectError, TransferError};
 use crate::state::{Contribution, Project, Status, User};
 
 pub fn add_contribution(ctx: Context<AddContribution>, amount: u64) -> Result<()> {
-    validate_authority(&ctx)?;
     validate_project_status(&ctx.accounts.project)?;
     transfer_funds(&ctx, amount)?;
     update_contribution(&mut ctx.accounts.contribution, &ctx.accounts.user, &mut ctx.accounts.project, amount)?;
     update_project(&mut ctx.accounts.project, amount)?;
-    Ok(())
-}
-
-fn validate_authority(ctx: &Context<AddContribution>) -> Result<()> {
-    if &ctx.accounts.signer.key() != &ctx.accounts.user.wallet_pubkey {
-        return Err(TransferError::WrongAuthority.into());
-    }
     Ok(())
 }
 
@@ -29,7 +21,7 @@ fn validate_project_status(project: &Account<Project>) -> Result<()> {
 
 fn transfer_funds(ctx: &Context<AddContribution>, amount: u64) -> Result<()> {
     let transfer_instruction = Transfer {
-        from: ctx.accounts.signer.to_account_info(),
+        from: ctx.accounts.wallet_pubkey.to_account_info(),
         to: ctx.accounts.contribution.to_account_info(),
     };
     let cpi_ctx = CpiContext::new(
@@ -81,7 +73,7 @@ fn update_project(project: &mut Account<Project>, amount: u64) -> Result<()> {
 #[derive(Accounts)]
 #[instruction(amount: u32)]
 pub struct AddContribution<'info> {
-    #[account(mut)]
+    #[account(mut, has_one = wallet_pubkey)]
     pub user: Account<'info, User>,
 
     #[account(mut)]
@@ -89,7 +81,7 @@ pub struct AddContribution<'info> {
 
     #[account(
         init_if_needed,
-        payer = signer,
+        payer = wallet_pubkey,
         space = 8 + Contribution::INIT_SPACE,
         seeds = [b"contribution", project.key().as_ref(), user.key().as_ref()],
         bump
@@ -97,7 +89,7 @@ pub struct AddContribution<'info> {
     pub contribution: Account<'info, Contribution>,
 
     #[account(mut)]
-    pub signer: Signer<'info>,
+    pub wallet_pubkey: Signer<'info>,
 
     pub system_program: Program<'info, System>,
 }

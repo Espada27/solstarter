@@ -62,9 +62,12 @@
           }
         },
         {
-          "name": "signer",
+          "name": "wallet_pubkey",
           "writable": true,
-          "signer": true
+          "signer": true,
+          "relations": [
+            "user"
+          ]
         },
         {
           "name": "system_program",

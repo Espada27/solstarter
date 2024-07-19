@@ -68,9 +68,12 @@ export type Solstarter = {
           }
         },
         {
-          "name": "signer",
+          "name": "walletPubkey",
           "writable": true,
-          "signer": true
+          "signer": true,
+          "relations": [
+            "user"
+          ]
         },
         {
           "name": "systemProgram",
