@@ -1,3 +1,4 @@
+
 /* eslint-disable @nx/enforce-module-boundaries */
 'use client';
 import { BN, Program } from '@coral-xyz/anchor';
@@ -11,6 +12,7 @@ import { useAnchorProvider } from '../solana/solana-provider';
 import { useTransactionToast } from '../ui/ui-layout';
 import { getSolstarterProgram, getSolstarterProgramId } from '../../../anchor/src';
 import { redirect, useRouter } from 'next/navigation';
+import { getLamportsFromSol } from '@/utils/utilsFunctions';
 
 interface CreateUserArgs {
   signer:PublicKey
@@ -30,6 +32,11 @@ interface CreateProjectArgs {
   userProjectCounter: number
 }
 
+interface ContributionArg {
+  userAccountPublicKey: PublicKey,
+  projectAccountPublicKey: PublicKey,
+  amount: number
+}
 
 export function useSolstarterProgram() {
   const { connection } = useConnection();
@@ -54,6 +61,11 @@ export function useSolstarterProgram() {
   const projectsAccounts = useQuery({
     queryKey: ['project', 'all', { cluster }],
     queryFn: () => program.account.project.all(),
+  });
+
+  const contributionsAccounts = useQuery({
+    queryKey: ['contribution', 'all', { cluster }],
+    queryFn: () => program.account.contribution.all(),
   });
 
   // i don't know what this function does
@@ -97,6 +109,12 @@ export function useSolstarterProgram() {
     // function call from the program
     mutationFn: async ({userAccountPublicKey,name,image_url,project_description,goal_amount,end_time,rewards,userProjectCounter}) => { //the input needed by the program function
 
+      // End time to unix timestamp conversion
+      const endTimeUnixTimestamp = Math.floor(new Date(end_time).getTime() / 1000);
+
+      // goal_amount is in SOL, we convert it to lamports
+      const lamportsAmount = getLamportsFromSol(goal_amount);
+
       // generation of the seeds for the PDA
       const [newProjectAddress] = await PublicKey.findProgramAddress(
         [
@@ -106,14 +124,17 @@ export function useSolstarterProgram() {
         ],
         programId
       )
+      console.log("counter",userProjectCounter);
+
       // Rewards serialization
       const serializedRewards = rewards.map((reward) => ({
         name: reward.name,
         rewardDescription: reward.rewardDescription,
         rewardAmount: reward.rewardAmount,
       }));
+      
       // call of the method
-      return await program.methods.createProject(name, image_url, project_description, new BN(goal_amount), new BN(end_time), serializedRewards)
+      return await program.methods.createProject(name, image_url, project_description, new BN(lamportsAmount), new BN(endTimeUnixTimestamp), serializedRewards)
         .accountsPartial({user:userAccountPublicKey,project:newProjectAddress}) // definition of the PDA address with the seed generated
         .rpc(); // launch the transaction
 
@@ -126,7 +147,36 @@ export function useSolstarterProgram() {
     onError: () => toast.error('Erreur dans l\'execution du programme'),
   });
 
+  const addContribution = useMutation<string,Error,ContributionArg>({
+    mutationKey: ['solstarter', 'addContribution', { cluster }],
+    mutationFn: async ({
+      userAccountPublicKey
+      ,projectAccountPublicKey
+      ,amount
+    }) => {
+      const [contributionAddress] = await PublicKey.findProgramAddressSync(
+        [
+          Buffer.from('contribution'), // seeds: "contribution" 
+          projectAccountPublicKey.toBuffer(), // seeds: the user account PDA public key
+          userAccountPublicKey.toBuffer() // seeds: the user project counter
+        ],
+        programId
+      )
 
+      return await program.methods
+        .addContribution(new BN(getLamportsFromSol(amount)))
+        .accountsPartial({
+          user:userAccountPublicKey
+          ,project:projectAccountPublicKey
+          ,contribution:contributionAddress
+        }).rpc();
+    },
+    onSuccess: (signature) => {
+      transactionToast(signature);
+      projectsAccounts.refetch();
+    },
+    onError: () => toast.error('Erreur dans l\'execution du programme'),
+  });
 
   return {
     program,
@@ -135,6 +185,8 @@ export function useSolstarterProgram() {
     createUser,
     getProgramAccount,
     projectsAccounts,
-    createProject
+    createProject,
+    addContribution,
+    contributionsAccounts
   };
 }

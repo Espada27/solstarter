@@ -129,7 +129,7 @@ export function ProfileTab({user, userProjects}:{user:User, userProjects:Project
     return (
         <GrayDisplayBlock padding='8'>
         <div className='flex justify-start items-start gap-10 w-full'>
-          <div className='flex flex-col items-center justify-start gap-2 '>
+          <div className='flex flex-col items-center justify-start gap-2'>
             {user.avatarUrl && <Image src={user.avatarUrl} alt={user.name} width={100} height={100} className='rounded-full'/>}
             <p className='text-center'>{user.name}</p>
           </div>
