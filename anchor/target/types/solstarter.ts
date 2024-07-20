@@ -68,9 +68,12 @@ export type Solstarter = {
           }
         },
         {
-          "name": "signer",
+          "name": "walletPubkey",
           "writable": true,
-          "signer": true
+          "signer": true,
+          "relations": [
+            "user"
+          ]
         },
         {
           "name": "systemProgram",
@@ -254,6 +257,11 @@ export type Solstarter = {
       "code": 6000,
       "name": "transferFailed",
       "msg": "Transfer of funds failed"
+    },
+    {
+      "code": 6001,
+      "name": "wrongAuthority",
+      "msg": "Signer not allowed"
     }
   ],
   "types": [

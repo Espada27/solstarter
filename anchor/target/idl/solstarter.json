@@ -62,9 +62,12 @@
           }
         },
         {
-          "name": "signer",
+          "name": "wallet_pubkey",
           "writable": true,
-          "signer": true
+          "signer": true,
+          "relations": [
+            "user"
+          ]
         },
         {
           "name": "system_program",
@@ -248,6 +251,11 @@
       "code": 6000,
       "name": "TransferFailed",
       "msg": "Transfer of funds failed"
+    },
+    {
+      "code": 6001,
+      "name": "WrongAuthority",
+      "msg": "Signer not allowed"
     }
   ],
   "types": [
