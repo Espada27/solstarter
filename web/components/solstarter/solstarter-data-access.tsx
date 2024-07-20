@@ -94,9 +94,9 @@ export function useSolstarterProgram() {
         .accountsPartial({user:userEntryAddress}) // definition of the PDA address with the seed generated
         .rpc(); // launch the transaction
     },
-    onSuccess: (signature) => {
+    onSuccess: async(signature) => {
       transactionToast(signature);
-      usersAccounts.refetch();
+      await usersAccounts.refetch();
       router.push('/myprofile');
     },
     onError: () => toast.error('Erreur dans l\'execution du programme'),
