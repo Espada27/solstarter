@@ -1,30 +1,21 @@
 'use client';
-
-import { useConnection, useWallet } from '@solana/wallet-adapter-react';
-import { redirect } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
-import { WalletButton } from '../solana/solana-provider';
 import GrayDisplayBlock from '../displayElements/GrayDisplayBlock';
 
 import Link from 'next/link';
 import MainButtonLabel from '../button/MainButtonLabel';
-import Image from 'next/image';
-import Divider from '../displayElements/Divider';
 import LoaderSmall from '../displayElements/LoaderSmall';
-import MainButtonLabelAsync from '../button/MainButtonLabelAsync';
-import { useGetBalance } from '../account/account-data-access';
 import { useSolstarterProgram } from '../solstarter/solstarter-data-access';
 import { PublicKey } from '@solana/web3.js';
-import ProjectCard from '../cards/ProjectCard';
 import { ContributionsTab, NoAccountCreated, NoWalletConnected, ProfileTab, ProjectsTab } from './myprofile-ui';
+import { useWallet } from '@solana/wallet-adapter-react';
 
 //* entry point
 export function MyProfileFeature() {
   const { publicKey } = useWallet();
-  const {usersAccounts,projectsAccounts,getProgramAccount,programId} = useSolstarterProgram();
+  const {usersAccounts,getProgramAccount} = useSolstarterProgram();
   const [userAccount, setUserAccount] = useState<User | null>(null);
   const[userAccountPublicKey,setUserAccountPublicKey] = useState<PublicKey | null>(null);
-  const [userProjects, setUserProjects] = useState<Project[] | null>(null);
 
   // check if usersAccounts includes the user account
   useEffect(()=>{
@@ -72,26 +63,38 @@ export function MyProfileFeature() {
 
 
 // element to display when account is created
-export function UserProfile({user,userAccountPublicKey}:{user:any,userAccountPublicKey:PublicKey}) {
-  const {projectsAccounts} = useSolstarterProgram();
-  const [userProjects, setUserProjects] = useState([]);
+export function UserProfile({user,userAccountPublicKey}:{user:User,userAccountPublicKey:PublicKey}) {
+  const {projectsAccounts,contributionsAccounts} = useSolstarterProgram();
+  const [userProjects, setUserProjects] = useState<AccountWrapper<Project>[]>([]);
+  const [userContributions, setUserContributions] = useState<AccountWrapper<Contribution>[]>([]);
   const [menuSelection, setMenuSelection] = useState<'profile' | 'projects' | 'contributions'>('profile');
 
-  // fetch the user projects
+  // fetch the user projects and contributions
   useEffect(()=>{
+    // projects
     if (userAccountPublicKey && projectsAccounts.data){
       const userProjectsData = projectsAccounts.data.filter(
         (project) => project.account.userPubkey.equals(userAccountPublicKey)
       );
 
-      if (userProjectsData) setUserProjects(userProjectsData as any);
+      if (userProjectsData) setUserProjects(userProjectsData);
+
     }
-  },[userAccountPublicKey,projectsAccounts.data?.values])
+    //contributions
+    if(userAccountPublicKey && contributionsAccounts.data){
+      const userContributions = contributionsAccounts.data.filter(
+        (contribution) => contribution.account.userPubkey.equals(userAccountPublicKey)
+      ); 
+
+      if (userContributions) setUserContributions(userContributions);
+    }
+  },[userAccountPublicKey,projectsAccounts.data,contributionsAccounts.data]);
 
   //* TEST
-  console.log("projectsAccounts",projectsAccounts);
+  // console.log("projectsAccounts",projectsAccounts);
   // console.log("userProjects",userProjects);
   // console.log("userAccountPublicKey",userAccountPublicKey);
+  console.log("userContributions",userContributions);
   
   
 
@@ -105,9 +108,9 @@ export function UserProfile({user,userAccountPublicKey}:{user:any,userAccountPub
           <button className={`btn btn-ghost text-textColor-second  ${menuSelection === 'contributions' ? "bg-gray-800 text-textColor-main dark:text-textColor-main-dark":""}`} onClick={()=>setMenuSelection("contributions")}>Mes contributions</button>
         </div>
       </GrayDisplayBlock>
-      {menuSelection === 'profile' && <ProfileTab user={user} userProjects={userProjects}/>}
+      {menuSelection === 'profile' && <ProfileTab user={user}/>}
       {menuSelection === 'projects' && <ProjectsTab userProjects={userProjects}/>}
-      {menuSelection === 'contributions' && <ContributionsTab/>}
+      {menuSelection === 'contributions' && <ContributionsTab userContributions={userContributions}/>}
     </div>
   )
 }

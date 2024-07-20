@@ -7,7 +7,6 @@ import { useRouter } from "next/navigation";
 import { IoArrowBack } from "react-icons/io5";
 import Image from "next/image";
 import MainButtonLabel from "../button/MainButtonLabel";
-import { set } from "@coral-xyz/anchor/dist/cjs/utils/features";
 import ContributionPopup from "../popup/ContributionPopup";
 import { useWallet } from "@solana/wallet-adapter-react";
 import { PublicKey } from "@solana/web3.js";
@@ -100,13 +99,11 @@ export function ProjectDetailFeature(props: ProjectDetailFeatureProps){
     //* TEST
     // console.log("projectToDisplay",projectToDisplay);
     // console.log("ownerToDisplay",ownerToDisplay);
-    console.log("contributionAccounts",contributionsAccounts.data && contributionsAccounts.data[0].publicKey.toString());
-    console.log("contributionToDisplay",contributionToDisplay);
+    // console.log("contributionAccounts",contributionsAccounts.data && contributionsAccounts.data[0].publicKey.toString());
+    // console.log("contributionToDisplay",contributionToDisplay);
     // console.log("projectPubkey",props.projectAccountPubkey.toString());
     // console.log("userAccountPublicKey",userAccountPublicKey?.toString())
     
-    
-
     return (
         <div className='w-full mx-auto flex flex-col items-start justify-start gap-4'>
             <div className="flex justify-start w-full">
@@ -119,7 +116,7 @@ export function ProjectDetailFeature(props: ProjectDetailFeatureProps){
             {/* image and contribution */}
             <div className="flex justify-start items-start gap-8 w-full">
                 <div className="relative w-1/3 aspect-square">
-                    <Image src={projectToDisplay.imageUrl} alt='project image' fill  className=' object-cover ' />
+                    <Image src={projectToDisplay.imageUrl} alt='project image' fill  className=' object-cover rounded-xl ' />
                 </div>
                 <div className="flex flex-col items-start justify-between w-full gap-4">
                     <p>Montant des contributions</p>

@@ -83,9 +83,11 @@ export function ProjectList(props:ProjectListProps){
                 className="grid gap-20  w-full justify-center"
                 style={{gridTemplateColumns:"repeat(auto-fit,minmax(420px,auto)"}} // handle automatic number of column in responsive
             >
+                {/* if not filter */}
                 {props.seletedStatus === null && allProjects && allProjects.map((project ,index)=>(
                     <ProjectCard key={index} project={project.account} projectAccountPubkey={project.publicKey}/>
                 ))}
+                {/* if filter */}
                 {props.seletedStatus && projectsToDisplay && projectsToDisplay.map((project,index)=>(
                     <ProjectCard key={index} project={project.account} projectAccountPubkey={project.publicKey}/>
                 ))}
