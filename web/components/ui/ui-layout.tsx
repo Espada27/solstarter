@@ -15,6 +15,8 @@ import {
 } from '../cluster/cluster-ui';
 import toast, { Toaster } from 'react-hot-toast';
 import { useWallet } from '@solana/wallet-adapter-react';
+import GrayDisplayBlock from '../displayElements/GrayDisplayBlock';
+import MainButtonLabel from '../button/MainButtonLabel';
 
 export function UiLayout({
   children,
@@ -201,4 +203,17 @@ export function useTransactionToast() {
       </div>
     );
   };
+}
+
+export function StandardErrorDisplay()  {
+  return (
+    <div className='w-full md:w-1/2 mx-auto mt-24'>
+      <GrayDisplayBlock padding='8'>
+        <div className="flex flex-col items-center justify-center gap-10 w-full">
+            <p>Il y a eu un souci...</p>
+            <Link href={'/'}><MainButtonLabel label="Retourner à l'accueil"/></Link>
+        </div>
+      </GrayDisplayBlock>
+    </div>
+  );
 }

@@ -3,7 +3,6 @@ import { ProjectStatus } from "./enum"
 
 //* PROJECTS
 export const project1:Project = {
-    pubkey: "1",
     ownerPubkey: "1",
     userPubkey: "1",
     name: 'Don association',
@@ -31,7 +30,6 @@ export const project1:Project = {
 }
 
 export const project2:Project = {
-    pubkey: "2",
     ownerPubkey: "2",
     userPubkey: "1",
 
@@ -61,7 +59,6 @@ export const project2:Project = {
 }
 
 export const project3:Project = {
-    pubkey: "3",
     ownerPubkey: "3",
     userPubkey: "1",
 
@@ -90,7 +87,6 @@ export const project3:Project = {
 }
 
 export const project4:Project = {
-    pubkey: "1",
     ownerPubkey: "1",
     userPubkey: "1",
 
@@ -119,7 +115,6 @@ export const project4:Project = {
 }
 
 export const project5:Project = {
-    pubkey: "2",
     ownerPubkey: "2",
     userPubkey: "1",
 
@@ -148,7 +143,6 @@ export const project5:Project = {
 }
 
 export const project6:Project = {
-    pubkey: "3",
     ownerPubkey: "3",
     userPubkey: "1",
 

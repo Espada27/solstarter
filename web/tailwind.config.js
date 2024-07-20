@@ -14,7 +14,7 @@ module.exports = {
     extend: {
       colors: {
         "mainColor":"#FFFFFF",
-        "mainColorDark":"#0a0a0a", //@0a0a0a
+        "mainColorDark":"#1d232a", //@0a0a0a
         "mainButtonDark":"#fafafa",
         "secondColor":"#EFEFEF",
         "secondColorDark":"#525252",

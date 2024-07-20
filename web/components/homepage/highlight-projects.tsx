@@ -1,11 +1,7 @@
 'use client'
-import Image from 'next/image'
-import Link from 'next/link'
-import React, { use, useEffect, useState } from 'react'
-import Carousel from 'react-multi-carousel';
+import React, { useEffect, useState } from 'react'
 import 'react-multi-carousel/lib/styles.css';
 import { useSolstarterProgram } from '../solstarter/solstarter-data-access';
-import { extractAccountsData } from '@/utils/utilsFunctions';
 import ProjectCard from '../cards/ProjectCard';
 
 type Props = {
@@ -14,23 +10,28 @@ type Props = {
 
 const HighlightProjects = (props: Props) => {
     const {projectsAccounts} = useSolstarterProgram();
-    const[projectsToDisplay,setProjectsToDisplay] = useState<Project[]>([]);
+    const[projectsToDisplay,setProjectsToDisplay] = useState<AccountWrapper<Project>[] | null>(null);
 
-    // extract data from the program accounts
+    // Sort the project by raisedAmount and display the 3 most important
     useEffect(() => {
       if (projectsAccounts.data){
-        const projectsData = extractAccountsData<Project>(projectsAccounts.data as AccountWrapper<Project>[]);
-        setProjectsToDisplay(projectsData.slice(0,3));
+        const topRaisedProjects = projectsAccounts.data
+            .sort((a,b)=>b.account.raisedAmount - a.account.raisedAmount)
+            .slice(0,3)// find the 3 projects wiht raisedAmount the most important
+        
+        if(topRaisedProjects){
+            setProjectsToDisplay(topRaisedProjects as AccountWrapper<Project>[]);
+        }
       }
     }, [projectsAccounts.data]);
 
-    console.log(projectsToDisplay);
-    
+    //* TEST
+    // console.log(projectsToDisplay);
     
     return (
         <div className='flex justify-center items-center w-full min-h-full gap-4 overflow-x-auto md:overflow-x-hidden'>
-            {projectsToDisplay.map((project:Project, index:any) => (
-                <ProjectCard key={index} project={project}/>
+            {projectsToDisplay && projectsToDisplay.map((project, index) => (
+                <ProjectCard key={index} project={project.account} projectAccountPubkey={project.publicKey}/>
             ))}
         </div>
     )

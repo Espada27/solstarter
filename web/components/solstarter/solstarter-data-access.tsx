@@ -1,3 +1,4 @@
+
 /* eslint-disable @nx/enforce-module-boundaries */
 'use client';
 import { BN, Program } from '@coral-xyz/anchor';
@@ -31,6 +32,11 @@ interface CreateProjectArgs {
   userProjectCounter: number
 }
 
+interface ContributionArg {
+  userAccountPublicKey: PublicKey,
+  projectAccountPublicKey: PublicKey,
+  amount: number
+}
 
 export function useSolstarterProgram() {
   const { connection } = useConnection();
@@ -55,6 +61,11 @@ export function useSolstarterProgram() {
   const projectsAccounts = useQuery({
     queryKey: ['project', 'all', { cluster }],
     queryFn: () => program.account.project.all(),
+  });
+
+  const contributionsAccounts = useQuery({
+    queryKey: ['contribution', 'all', { cluster }],
+    queryFn: () => program.account.contribution.all(),
   });
 
   // i don't know what this function does
@@ -136,7 +147,36 @@ export function useSolstarterProgram() {
     onError: () => toast.error('Erreur dans l\'execution du programme'),
   });
 
+  const addContribution = useMutation<string,Error,ContributionArg>({
+    mutationKey: ['solstarter', 'addContribution', { cluster }],
+    mutationFn: async ({
+      userAccountPublicKey
+      ,projectAccountPublicKey
+      ,amount
+    }) => {
+      const [contributionAddress] = await PublicKey.findProgramAddressSync(
+        [
+          Buffer.from('contribution'), // seeds: "contribution" 
+          projectAccountPublicKey.toBuffer(), // seeds: the user account PDA public key
+          userAccountPublicKey.toBuffer() // seeds: the user project counter
+        ],
+        programId
+      )
 
+      return await program.methods
+        .addContribution(new BN(getLamportsFromSol(amount)))
+        .accountsPartial({
+          user:userAccountPublicKey
+          ,project:projectAccountPublicKey
+          ,contribution:contributionAddress
+        }).rpc();
+    },
+    onSuccess: (signature) => {
+      transactionToast(signature);
+      projectsAccounts.refetch();
+    },
+    onError: () => toast.error('Erreur dans l\'execution du programme'),
+  });
 
   return {
     program,
@@ -145,6 +185,8 @@ export function useSolstarterProgram() {
     createUser,
     getProgramAccount,
     projectsAccounts,
-    createProject
+    createProject,
+    addContribution,
+    contributionsAccounts
   };
 }

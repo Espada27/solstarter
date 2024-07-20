@@ -1,13 +1,13 @@
 use anchor_lang::prelude::*;
 
+pub mod errors;
 pub mod instructions;
 pub mod state;
-pub mod errors;
 
 use crate::state::project::Reward;
 use instructions::*;
 
-declare_id!("EPYqwH4n7Eu8n8NAwr1PorvsNJsjLfJDaQ7Q9QXxX8fX");
+declare_id!("CDSfYDw1tgrc4y1NDuMn8dkTSKuz32XkPPh5dj4pgD6R");
 
 #[program]
 pub mod solstarter {
