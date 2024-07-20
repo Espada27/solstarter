@@ -12,7 +12,6 @@ import { useTransactionToast } from '../ui/ui-layout';
 import { getSolstarterProgram, getSolstarterProgramId } from '../../../anchor/src';
 import { useRouter } from 'next/navigation';
 import { getLamportsFromSol } from '@/utils/utilsFunctions';
-import { users } from '@/data/localdata';
 
 /* 
  * Mutations interfaces
@@ -148,7 +147,7 @@ export function useSolstarterProgram() {
 
       // Convert the goal_amount to lamports
       const lamportsAmount = getLamportsFromSol(goal_amount);
-
+      
       // Build the seeds for the new project address
       const [newProjectAddress] = await PublicKey.findProgramAddress(
         [
@@ -158,7 +157,6 @@ export function useSolstarterProgram() {
         ],
         programId
       )
-      console.log("counter",userProjectCounter);
 
       // Serialize the rewards for compatibility with the program
       const serializedRewards = rewards.map((reward) => ({
@@ -188,7 +186,7 @@ export function useSolstarterProgram() {
     onError: () => toast.error('Erreur dans l\'execution du programme'),
   });
 
-
+  
   /**
    * Adds a contribution to a Solstarter project.
    *
