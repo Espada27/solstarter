@@ -14,8 +14,10 @@ pub enum TransferError {
 
 #[error_code]
 pub enum WithdrawError {
-    #[msg("Invalid contribution account found. Withdraw aborted.")]
-    InvalidContributionAccount,
+    #[msg("Invalid amount found. Withdraw aborted.")]
+    InvalidAmountToWithdraw,
+    #[msg("Goal amount not reached. Withdraw aborted.")]
+    UnreachedGoalAmount,
     #[msg("Project status must be Completed. Withdraw aborted.")]
     InvalidProjectStatus,
     #[msg("Contribution accounts did not match project contributions counter. Withdraw aborted.")]

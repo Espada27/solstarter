@@ -1,53 +1,38 @@
 use anchor_lang::prelude::*;
 
 use crate::errors::WithdrawError;
-use crate::state::{Contribution, Project, Status};
+use crate::state::{Project, Status};
 
 pub fn withdraw<'info>(ctx: Context<WithdrawFunds>) -> Result<()> {
     // Project ownership is checked in the project account derivation
 
     let to_wallet = ctx.accounts.owner_pubkey.to_account_info();
-    let contributions_count = ctx.accounts.project.contribution_counter as usize;
+    let goal_amount = ctx.accounts.project.goal_amount;
+    let raised_amount = ctx.accounts.project.raised_amount;
+    let project_lamports_balance = **ctx.accounts.project.to_account_info().lamports.borrow();
 
-    // Check if the project is in the Completed status
-    validate_project_status(&ctx.accounts.project)?;
-
-    require_eq!(
-        contributions_count,
-        ctx.remaining_accounts.len(),
-        WithdrawError::NotEqualContributionCounter
+    require_gte!(
+        raised_amount,
+        goal_amount,
+        WithdrawError::UnreachedGoalAmount
     );
 
-    for i in 0..contributions_count {
-        // Extract Contribution AccountInfo project_pubkey
-        let contribution = &ctx.remaining_accounts[i];
-        let contribution_ref_data = contribution.try_borrow_data()?;
-        let mut contribution_u8_data: &[u8] = &contribution_ref_data;
-        let contribution_data: Contribution =
-            Contribution::try_deserialize(&mut contribution_u8_data)?;
+    require_eq!(
+        raised_amount,
+        project_lamports_balance,
+        WithdrawError::InvalidAmountToWithdraw
+    );
 
-        //Must be a valid contribution account
-        require_neq!(
-            contribution_data.project_pubkey,
-            ctx.accounts.project.key(),
-            WithdrawError::InvalidContributionAccount
-        );
-        withdraw_funds(&to_wallet, &contribution)?;
-    }
+    withdraw_funds(&to_wallet, &ctx.accounts.project.to_account_info())?;
+
+    ctx.accounts.project.status = Status::Completed;
 
     Ok(())
 }
 
-fn validate_project_status(project: &Account<Project>) -> Result<()> {
-    if project.status != Status::Completed {
-        return Err(WithdrawError::InvalidProjectStatus.into());
-    }
-    Ok(())
-}
-
-fn withdraw_funds(to_wallet: &AccountInfo, contribution: &AccountInfo) -> Result<()> {
-    let amount = **contribution.lamports.borrow();
-    **contribution.try_borrow_mut_lamports()? -= amount;
+fn withdraw_funds(to_wallet: &AccountInfo, from_project: &AccountInfo) -> Result<()> {
+    let amount = **from_project.lamports.borrow();
+    **from_project.try_borrow_mut_lamports()? -= amount;
     **to_wallet.try_borrow_mut_lamports()? += amount;
     Ok(())
 }
