@@ -1,12 +1,21 @@
-import { ActionGetResponse, ActionPostRequest, ActionPostResponse, ACTIONS_CORS_HEADERS, createPostResponse, MEMO_PROGRAM_ID } from "@solana/actions";
+import { ActionGetResponse, ActionPostRequest, ActionPostResponse, ACTIONS_CORS_HEADERS, createPostResponse } from "@solana/actions";
 import { clusterApiUrl, ComputeBudgetProgram, Connection, LAMPORTS_PER_SOL, PublicKey, SystemProgram, Transaction } from "@solana/web3.js";
+import { COMMUNITY_CONTRIBUTOR_PUBKEY, SOLSTARTER_PROGRAM_ID } from "@solstarter/anchor";
 
 export const GET = (req: Request) => {
+    const url = new URL(req.url);
+    let projectId = null;
+    try {
+        projectId =  new URLSearchParams(url.search).get("projectId");
+        /**
+         * TODO Fetch project data to have a dynamic Action
+         */
+    } catch (error) {}
 
     const payload: ActionGetResponse = {
-        icon: new URL("/images/fusee.jpg", new URL(req.url).origin).toString(),
+        icon: new URL("/images/fusee.jpg", url.origin).toString(),
         label: "Contribute",
-        description: "Contribute to this project",
+        description: "Contribute to a project chosen by the community",
         title: "Solstarter - Contribute",
         links: {
             actions: [
@@ -41,6 +50,8 @@ export const GET = (req: Request) => {
     });
 }
 
+export const OPTIONS = GET;
+
 export const POST = async (req: Request) => {
     try {
         const url = new URL(req.url);
@@ -65,10 +76,10 @@ export const POST = async (req: Request) => {
             }
         }
 
-        const TO_PUBKEY = new PublicKey("Hb8n1KUuULUAG8gzqHWJZoFUkDrr8fWSbuszQ8WqVVGK");
+        
         const transaction = new Transaction().add(SystemProgram.transfer({
             fromPubkey: account,
-            toPubkey: TO_PUBKEY,
+            toPubkey: COMMUNITY_CONTRIBUTOR_PUBKEY,
             lamports: amount * LAMPORTS_PER_SOL,
             programId: SystemProgram.programId
         }));
@@ -76,8 +87,7 @@ export const POST = async (req: Request) => {
         transaction.add(ComputeBudgetProgram.setComputeUnitPrice({
             microLamports: 1000,
         }), {
-            programId: new PublicKey(MEMO_PROGRAM_ID),
-            data: Buffer.from("this is a simple memo message", "utf-8"),
+            programId: new PublicKey(SOLSTARTER_PROGRAM_ID),
             keys: [],
         }
         )

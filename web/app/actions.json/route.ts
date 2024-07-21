@@ -1,13 +1,12 @@
 import { ACTIONS_CORS_HEADERS, ActionsJson } from "@solana/actions";
 
-export const GET = () => {
+export const GET = async () => {
 
     const payload: ActionsJson = {
         rules: [
             {
-                pathPattern: "/now",
+                pathPattern: "/projects/**",
                 apiPath: "/api/actions/contribute",
-
             }
         ]
     }
