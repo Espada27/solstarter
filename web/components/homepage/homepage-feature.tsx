@@ -8,6 +8,7 @@ import Link from 'next/link';
 import { useSolstarterProgram } from '../solstarter/solstarter-data-access';
 import { useEffect, useState } from 'react';
 import { getSolFromLamports } from '@/utils/utilsFunctions';
+import { BN } from '@coral-xyz/anchor';
 
 
 export default function HomepageFeature() {
@@ -20,7 +21,7 @@ export default function HomepageFeature() {
   useEffect(() => {
     if (contributionsAccounts.data){
       setNbOfContributions(contributionsAccounts.data.length);
-      setTotalAmount(contributionsAccounts.data.reduce((acc,contribution) => acc+contribution.account.amount,0));
+      setTotalAmount(contributionsAccounts.data.reduce((acc,contribution) => acc.add(contribution.account.amount),new BN(0)));
     }
   }, [contributionsAccounts.data]);
 
