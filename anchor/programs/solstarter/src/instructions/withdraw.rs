@@ -4,12 +4,12 @@ use crate::errors::WithdrawError;
 use crate::state::{Project, Status};
 
 pub fn withdraw<'info>(ctx: Context<WithdrawFunds>) -> Result<()> {
-    // Project ownership is checked in the project account derivation
+    /*
+     * Project ownership is checked in the project account derivation
+     */
 
-    let to_wallet = ctx.accounts.owner_pubkey.to_account_info();
     let goal_amount = ctx.accounts.project.goal_amount;
     let raised_amount = ctx.accounts.project.raised_amount;
-    let project_lamports_balance = **ctx.accounts.project.to_account_info().lamports.borrow();
 
     require_gte!(
         raised_amount,
@@ -17,23 +17,20 @@ pub fn withdraw<'info>(ctx: Context<WithdrawFunds>) -> Result<()> {
         WithdrawError::UnreachedGoalAmount
     );
 
-    require_eq!(
-        raised_amount,
-        project_lamports_balance,
-        WithdrawError::InvalidAmountToWithdraw
-    );
+    **ctx
+        .accounts
+        .project
+        .to_account_info()
+        .try_borrow_mut_lamports()? -= raised_amount;
 
-    withdraw_funds(&to_wallet, &ctx.accounts.project.to_account_info())?;
+    **ctx
+        .accounts
+        .owner_pubkey
+        .to_account_info()
+        .try_borrow_mut_lamports()? += raised_amount;
 
     ctx.accounts.project.status = Status::Completed;
 
-    Ok(())
-}
-
-fn withdraw_funds(to_wallet: &AccountInfo, from_project: &AccountInfo) -> Result<()> {
-    let amount = **from_project.lamports.borrow();
-    **from_project.try_borrow_mut_lamports()? -= amount;
-    **to_wallet.try_borrow_mut_lamports()? += amount;
     Ok(())
 }
 
