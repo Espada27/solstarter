@@ -10,6 +10,7 @@ import MainButtonLabelAsync from '../button/MainButtonLabelAsync';
 import SecondaryButtonLabel from '../button/SecondaryButtonLabel';
 import { PublicKey } from '@solana/web3.js';
 import { useSolstarterProgram } from '../solstarter/solstarter-data-access';
+import { getSolFromLamports } from '@/utils/utilsFunctions';
 
 
 type Props = {
@@ -77,7 +78,7 @@ const ContributionPopup = (props: Props) => {
                 {props.contribution ? 
                     <div className='flex flex-col items-center justify-center gap-4'>
                         <p>Votre contribution actuelle à ce projet</p>
-                        <p>{props.contribution.amount.toString()} SOL</p>
+                        <p>{getSolFromLamports(props.contribution.amount)} SOL</p>
                     </div>
                 :
                     <p>Vous n&apos;avez pas encore contribué à ce projet</p>

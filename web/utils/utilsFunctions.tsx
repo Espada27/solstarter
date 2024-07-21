@@ -25,3 +25,7 @@ export const millisecondsToDays = (milliseconds: number) => {
   const millisecondsPerDay = 1000 * 60 * 60 * 24;
   return Math.floor(milliseconds / millisecondsPerDay);
 };
+
+export const getProgressPercentage = (start: number, end: number) => {
+  return Math.floor(start / end * 100)
+};

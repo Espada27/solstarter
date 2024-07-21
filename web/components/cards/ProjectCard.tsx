@@ -3,7 +3,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import React, { useEffect } from 'react'
 import { useSolstarterProgram } from '../solstarter/solstarter-data-access'
-import { getSolFromLamports } from '@/utils/utilsFunctions'
+import { getProgressPercentage } from '@/utils/utilsFunctions'
 
 type Props = {
     project:Project
@@ -15,7 +15,7 @@ const ProjectCard = (props: Props) => {
   const {usersAccounts} = useSolstarterProgram();
 
   //* LOCAL STATE
-  const progressPercentage = (props.project.raisedAmount / props.project.goalAmount) * 100;
+  const progressPercentage = getProgressPercentage(props.project.raisedAmount, props.project.goalAmount);
   const [projectOwner, setProjectOwner] = React.useState<User | null>(null);
 
   // fetch project owner
@@ -45,17 +45,16 @@ const ProjectCard = (props: Props) => {
               <Image src={props.project.imageUrl} alt='project image' width={420} height={230}  className='object-cover aspect-video rounded-t-xl' />
           </div>
           {/* barre de progression */}
-          <div className='w-full bg-gray-200 h-1 relative'>
-            <div
-              className=' h-4 absolute'
-              style={{ width: `${progressPercentage}%` }}
-            ></div>
+          <div className="w-full bg-gray-200 dark:bg-gray-700">
+            <div className="bg-green-600 h-1.5" style={{width: `${progressPercentage}%`}}></div>
           </div>
           {/* info */}
           <div className='bg-white flex flex-col z-10 w-full p-2 rounded-b-xl'>
-            <h3 className='text-xl text-textColor-main'>{props.project.name}</h3>
+            <div className='flex justify-between items-center'>
+              <h3 className='text-xl text-textColor-main'>{props.project.name}</h3>
+              <p className='text-textColor-second'> {progressPercentage}%</p>
+            </div>
             <p className='text-textColor-second'>Par : {projectOwner?.name}</p>
-
           </div>
       </Link>
     </div>

@@ -18,9 +18,9 @@ export default function HomepageFeature() {
       </div>
       <h3 className='text-lg text-center'>Contribuez, évaluez, réallouez</h3>
       <p className='text-textColor-second dark:text-textColor-second-dark text-center w-full md:w-1/2 mx-auto'>
-        Sur Solstarter, votre contribution initiale vie au gré de votre évaluation du projet,
-        Maintenez là pour conserver votre avantage à venir ou bien revendez là pour basculer sur un autre projet ; ou pour shill au restaurant 😎<br/>
-        Et tout ça, grâce à au web3 et à la blockchain
+        Sur Solstarter, votre contribution initiale vit au gré de votre évaluation du projet,
+        Maintenez la pour conserver votre avantage à venir ou bien revendez là pour basculer sur un autre projet ; ou pour shill au restaurant 😎<br/>
+        Et tout ça, grâce au web3 et à la blockchain
       </p>
     </div>
   );
