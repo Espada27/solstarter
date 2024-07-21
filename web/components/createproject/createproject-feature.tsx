@@ -13,7 +13,7 @@ import { useSolstarterProgram } from "../solstarter/solstarter-data-access";
 import toast from "react-hot-toast";
 import { BN } from "@coral-xyz/anchor";
 import { PublicKey } from "@solana/web3.js";
-import { NoWalletConnected } from "../myprofile/myprofile-ui";
+import { NoAccountCreated, NoWalletConnected } from "../myprofile/myprofile-ui";
 
 
 
@@ -21,32 +21,8 @@ import { NoWalletConnected } from "../myprofile/myprofile-ui";
 
 export function CreateProjectFeature(){
     const {publicKey} = useWallet();
-    
-    if (!publicKey) {
-        return <NoWalletConnected />;
-    }
+    const {usersAccounts} = useSolstarterProgram();
 
-    if (publicKey) {
-        return <CreateProjectForm />;
-    }
-
-    // default return (should never be displayed)
-    return (
-        <div className='w-full md:w-1/2 mx-auto mt-24'>
-          <GrayDisplayBlock padding='8'>
-            <div className="flex flex-col items-center justify-center gap-10 w-full">
-                <p>Il y a eu un souci...</p>
-                <Link href={'/'}><MainButtonLabel label="Retourner à l'accueil"/></Link>
-            </div>
-          </GrayDisplayBlock>
-        </div>
-    )
-}
-
-//* CreateProjectForm
-export function CreateProjectForm(){
-    const {publicKey} = useWallet();
-    const {usersAccounts,createProject} = useSolstarterProgram();
     const [userAccountPubkey, setUserAccountPubkey] = useState<PublicKey | null>(null);
     const [userAccount, setUserAccount] = useState<User | null>(null);
 
@@ -65,8 +41,57 @@ export function CreateProjectForm(){
     },[usersAccounts.data?.values,publicKey])
 
     
+    if (!publicKey) {
+        return <NoWalletConnected />;
+    }
 
-        
+    if (!userAccount) {
+        return <CreateAccountFirst />;
+    }
+
+    if (userAccount && userAccountPubkey){
+        return <CreateProjectForm userAccount={userAccount} userAccountPubkey={userAccountPubkey}/>;
+    }
+
+    // default return (should never be displayed)
+    return (
+        <div className='w-full md:w-1/2 mx-auto mt-24'>
+          <GrayDisplayBlock padding='8'>
+            <div className="flex flex-col items-center justify-center gap-10 w-full">
+                <p>Il y a eu un souci...</p>
+                <Link href={'/'}><MainButtonLabel label="Retourner à l'accueil"/></Link>
+            </div>
+          </GrayDisplayBlock>
+        </div>
+    )
+}
+
+//* Create account first
+export function CreateAccountFirst(){
+    return (
+        <div className='w-full md:w-1/2 mx-auto mt-24'>
+          <GrayDisplayBlock padding='8'>
+            <div className="flex flex-col items-center justify-center gap-10 w-full">
+                <p className="text-center text-textColor-second dark:text-textColor-second-dark">Vous devez d&apos;abord créer un compte Solstarter avant de proposer un projet</p>
+                <Link href={'/myprofile'}><MainButtonLabel label="Créer mon compte solstarter"/></Link>
+            </div>
+          </GrayDisplayBlock>
+        </div>
+    )
+}
+
+//* CreateProjectForm
+type CreateProjectFormProps = {
+    userAccount:User
+    userAccountPubkey:PublicKey
+}
+
+export function CreateProjectForm(props:CreateProjectFormProps){
+    //* GLOBAL STATE
+    const {publicKey} = useWallet();
+    const {createProject} = useSolstarterProgram();
+    
+    //* LOCAL STATE
     const [rewards, setRewards] = useState<Reward[]>([
         {
             name: '',
@@ -95,7 +120,7 @@ export function CreateProjectForm(){
     })
 
    
-
+    //* LOCAL FUNCTIONS
     const handleProjectChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         const { name, value } = e.target;
         setProjectToCreate((prevProfile) => ({
@@ -127,6 +152,8 @@ export function CreateProjectForm(){
         return projectToCreate.name && projectToCreate.imageUrl && projectToCreate.projectDescription && projectToCreate.goalAmount && projectToCreate.endTime
     }, [projectToCreate]);
 
+
+    //* PROGRAM CALLS
     // on submit, launch de createUser method
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();       
@@ -134,20 +161,20 @@ export function CreateProjectForm(){
             toast.error('Wallet non connecté')
             return; 
         }
-        if(!userAccountPubkey || !userAccount) {
+        if(!props.userAccountPubkey || !props.userAccount) {
             toast.error('Compte utilisateur introuvable')
             return;
         }
-        if (publicKey && userAccountPubkey && projectToCreate.name && projectToCreate.imageUrl && projectToCreate.projectDescription && projectToCreate.goalAmount && projectToCreate.endTime) {
+        if (publicKey && props.userAccountPubkey && projectToCreate.name && projectToCreate.imageUrl && projectToCreate.projectDescription && projectToCreate.goalAmount && projectToCreate.endTime) {
             createProject.mutateAsync({
-            userAccountPublicKey: userAccountPubkey,
+            userAccountPublicKey: props.userAccountPubkey,
             name: projectToCreate.name,
             image_url: projectToCreate.imageUrl,
             project_description: projectToCreate.projectDescription,
             goal_amount: projectToCreate.goalAmount,
             end_time: projectToCreate.endTime.getTime()  ,
             rewards: rewards,
-            userProjectCounter: userAccount.createdProjectCounter
+            userProjectCounter: props.userAccount.createdProjectCounter
             });
         } else {
             toast.error('Informations manquantes')
@@ -157,11 +184,8 @@ export function CreateProjectForm(){
     //* TEST
     // console.log("projectToCreate", projectToCreate);
     // console.log("userAccount", userAccount);
-    console.log("userAccountPubkey", userAccountPubkey?.toString());
+    console.log("userAccountPubkey", props.userAccountPubkey?.toString());
     
-    
-    
-
 
     return (
         <div className='w-full md:w-1/2 mx-auto mt-10 flex flex-col items-center justify-start gap-10'>

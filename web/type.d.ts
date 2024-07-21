@@ -10,7 +10,6 @@ type Reward ={
 }
 
 type Project ={
-    pubkey:string // should be pda address
     ownerPubkey:PublicKey
     userPubkey:PublicKey
     name:string
@@ -26,9 +25,15 @@ type Project ={
 }
 
 type User ={
-    walletPubkey:string
+    walletPubkey:PublicKey
     name:string
     avatarUrl:string
     bio:string
     createdProjectCounter:number
+}
+
+type Contribution= {
+    userPubkey:PublicKey
+    projectPubkey:PublicKey
+    amount:number
 }

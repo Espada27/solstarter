@@ -9,8 +9,8 @@ import MainButtonLabelAsync from "../button/MainButtonLabelAsync";
 import MainButtonLabel from "../button/MainButtonLabel";
 import Image from "next/image";
 import Link from "next/link";
-import Divider from "../displayElements/Divider";
 import ProjectCard from "../cards/ProjectCard";
+import ContributionCard from "../cards/ContributionCard";
 
 
 
@@ -70,9 +70,9 @@ export function NoAccountCreated(){
       });
     };
   
-    console.log("userToCreate",userToCreate);
+    //* TEST
+    // console.log("userToCreate",userToCreate);
     
-  
     return (
       <div className='flex flex-col items-center justify-start gap-10 w-full md:w-1/2 mx-auto'>
         <h2 className='text-xl '>Créer votre profil solstarter</h2>
@@ -125,11 +125,11 @@ export function NoAccountCreated(){
 
 
 //* Profile tab
-export function ProfileTab({user, userProjects}:{user:User, userProjects:Project[]}){
+export function ProfileTab({user}:{user:User}){
     return (
         <GrayDisplayBlock padding='8'>
         <div className='flex justify-start items-start gap-10 w-full'>
-          <div className='flex flex-col items-center justify-start gap-2 '>
+          <div className='flex flex-col items-center justify-start gap-2'>
             {user.avatarUrl && <Image src={user.avatarUrl} alt={user.name} width={100} height={100} className='rounded-full'/>}
             <p className='text-center'>{user.name}</p>
           </div>
@@ -148,16 +148,20 @@ export function ProfileTab({user, userProjects}:{user:User, userProjects:Project
 
 
 //* Project tab
-export function ProjectsTab({userProjects}:{userProjects:Project[]}){
+export function ProjectsTab({userProjects}:{userProjects:AccountWrapper<Project>[]}){
     return (
         <GrayDisplayBlock padding='8'>
         <div className='flex flex-col items-start justify-start gap-4 w-full'>
           <p className='text-textColor-main dark:text-textColor-main-dark text-xl font-bold'>Mes projets</p>
           {userProjects && userProjects.length === 0 && <p className="text-textColor-second dark:text-textColor-second-dark">Vous n&apos;avez pas encore créé de projet</p>}
-          {userProjects && userProjects.map((project:any, index:any) => (
-            // <p key={index}>{project.account.name}</p>
-            <ProjectCard project={project.account} key={index}/>
-          ))}
+          <div 
+            className="grid gap-20  w-full justify-center"
+            style={{gridTemplateColumns:"repeat(auto-fit,minmax(420px,auto)"}} // handle automatic number of column in responsive>
+          >
+            {userProjects && userProjects.map((project, index) => (
+              <ProjectCard key={index} project={project.account} projectAccountPubkey={project.publicKey}/>
+            ))}
+          </div>
         </div>
       </GrayDisplayBlock>
     )
@@ -165,13 +169,18 @@ export function ProjectsTab({userProjects}:{userProjects:Project[]}){
 
 
 //* Contributions tab
-export function ContributionsTab(){
+export function ContributionsTab({userContributions}:{userContributions:AccountWrapper<Contribution>[]}){
     return (
         <GrayDisplayBlock padding='8'>
         <div className='flex flex-col items-start justify-start gap-4 w-full'>
           <p className='text-textColor-main dark:text-textColor-main-dark text-xl font-bold'>Mes contributions</p>
-          <p className="text-textColor-second dark:text-textColor-second-dark">Vous n&apos;avez pas encore contribué à un projet</p>
-        </div>
+          {userContributions && userContributions.length === 0 && 
+            <p className="text-textColor-second dark:text-textColor-second-dark">Vous n&apos;avez pas encore contribué à un projet</p>
+          }
+          {userContributions && userContributions.map((contribution, index) => (
+            <ContributionCard key={index} contributions={contribution.account}/>
+          ))}
+          </div>
       </GrayDisplayBlock>
     )
 }
