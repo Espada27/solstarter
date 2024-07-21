@@ -4,6 +4,8 @@ use anchor_lang::prelude::*;
 pub enum ProjectError {
     #[msg("The project is not in the Ongoing status.")]
     ProjectNotOngoing,
+    #[msg("The project deadline has been reached")]
+    DeadlineReached,
 }
 
 #[error_code]
