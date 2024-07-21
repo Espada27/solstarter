@@ -28,14 +28,7 @@ export function UiLayout({
 
   //* LOCAL STATE
   const pathname = usePathname();
-  const { publicKey } = useWallet();
-  // redirect to homepage if wallet is disconnected
-  useEffect(()=>{
-    if (!publicKey && pathname !== '/') {
-      return redirect(`/`);
-    }
-  },[publicKey])
-  
+    
 
   return (
     <div className="min-h-screen w-full flex flex-col text-textColor-main dark:text-textColor-main-dark">
