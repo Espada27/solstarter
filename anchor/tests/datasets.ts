@@ -14,6 +14,13 @@ export const userData2: User = {
     created_project_counter: 0
 };
 
+export const userData3: User = {
+    name: "Elon Musk",
+    bio: "CEO of SpaceX",
+    avatar_url: "https://example.com/avatar.jpg",
+    created_project_counter: 0
+};
+
 /* Defining Rewards */
 const reward1:Reward = {
     name: 'reward1',
