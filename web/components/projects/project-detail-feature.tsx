@@ -10,7 +10,7 @@ import MainButtonLabel from "../button/MainButtonLabel";
 import ContributionPopup from "../popup/ContributionPopup";
 import { useWallet } from "@solana/wallet-adapter-react";
 import { PublicKey } from "@solana/web3.js";
-import { getLamportsFromSol, getSolFromLamports, getStatusString } from "@/utils/utilsFunctions";
+import { getProgressPercentage, getSolFromLamports, getStatusString } from "@/utils/utilsFunctions";
 import { ProjectStatus } from "@/data/enum";
 import { set } from "@coral-xyz/anchor/dist/cjs/utils/features";
 import { Audiowide} from "next/font/google";
@@ -46,7 +46,7 @@ export function ProjectDetailFeature(props: ProjectDetailFeatureProps){
             );
             if(projectData) {
                 setProjectToDisplay(projectData.account as Project);
-                setPercentage((projectData.account.raisedAmount / projectData.account.goalAmount) * 100);
+                setPercentage(getProgressPercentage(projectData.account.raisedAmount, projectData.account.goalAmount));
             }
         }
      },[props.projectAccountPubkey, projectsAccounts.data]);
@@ -138,16 +138,6 @@ export function ProjectDetailFeature(props: ProjectDetailFeatureProps){
         });
     }
 
-    //* TEST
-    console.log("projectToDisplay",projectToDisplay);
-    console.log("isCompleted",isCompleted);
-    console.log("raisedAmount",projectToDisplay?.raisedAmount.toString());
-    console.log("goalAmount",projectToDisplay?.goalAmount.toString())
-    
-    
-    
-    
-
     if (projectsAccounts.isPending) return <LoaderSmall/>;
 
     if(!projectToDisplay) return <StandardErrorDisplay/>;
@@ -176,11 +166,12 @@ export function ProjectDetailFeature(props: ProjectDetailFeatureProps){
                         </div>
                         {/* barre de progression */}
                         <div className="w-full bg-gray-200 dark:bg-gray-700 z-0">
-                            <div className="bg-green-600 h-1.5" style={{width: `${percentage}%`}}></div>
+                            <div className="bg-green-600 h-1.5" style={{width: `${Math.min(percentage, 100)}%`}}></div>
                         </div>
                         {/* amount */}
                         <p className="text-2xl font-thin text-textColor-second dark:text-textColor-second-dark">
-                            {getSolFromLamports(projectToDisplay.raisedAmount).toString() } SOL sur {getSolFromLamports(projectToDisplay.goalAmount).toString()} SOL
+                            {getSolFromLamports(projectToDisplay.raisedAmount).toString() } sur {getSolFromLamports(projectToDisplay.goalAmount).toString()} SOL
+
                         </p>
                     </div>
                     {/* second row */}
@@ -220,8 +211,10 @@ export function ProjectDetailFeature(props: ProjectDetailFeatureProps){
                             <div key={index} className="flex flex-col items-center justify-start gap-2">
                                 <p>Niveau {index+1} </p>
                                 <div className={`${index === 0 && "bg-green-600" } ${index === 1 && "bg-emerald-600" } ${index === 2 && "bg-teal-600" } rounded-full p-2`}>
-                                    <p className="text-center font-bold flex flex-col justify-center items-center gap-1 text-3xl p-4 h-32 rounded-full aspect-square bg-gray-400 " >
-                                        {reward.rewardAmount} <span className="text-xl font-normal">sol</span>
+                                    <p className="text-center font-bold flex  justify-center items-center gap-2 text-3xl p-4 h-32 rounded-full aspect-square bg-gray-400 " >
+                                        {reward.rewardAmount}
+                                        <Image alt="sol" src={'/images/logo_sol_black.png'} width={30} height={30} className="block dark:hidden"/> 
+                                        <Image alt="sol" src={'/images/logo_sol_white.png'} width={30} height={30} className="hidden dark:block"/> 
                                     </p>
                                 </div>
                                 <p className="text-textColor-second dark:text-textColor-second-dark text-center">{reward.rewardDescription}</p>

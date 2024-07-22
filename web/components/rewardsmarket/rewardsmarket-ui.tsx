@@ -6,6 +6,7 @@ import { useSolstarterProgram } from "../solstarter/solstarter-data-access";
 import { extractAccountsData } from "@/utils/utilsFunctions";
 import ProjectCard from "../cards/ProjectCard";
 import ContributionCard from "../cards/ContributionCard";
+import MainButtonLabel from "../button/MainButtonLabel";
 
 //* FILTERS
 type RewardsFilterProps = {
@@ -20,22 +21,22 @@ export function RewardsFilter(props:RewardsFilterProps){
         <GrayDisplayBlock padding="4">
             <div className='flex justify-between items-center w-full px-4'>
                 <div className='flex justify-start gap-2 w-1/2 '>
-                    <input type="radio" id='ongoing' checked={props.level === "1"} onChange={()=>props.setLevel("1")} className='p-2'/>
-                    <label className='w-full'>
+                <label className='w-full'>
+                    <input type="radio" id='ongoing' checked={props.level === "1"} onChange={()=>props.setLevel("1")} className='mr-1'/>
                     Niveau 1
-                    </label>
-                    <input type="radio" id='closed' checked={props.level === "2"} onChange={()=>props.setLevel("2")}/>
-                    <label className='w-full'>
+                </label>
+                <label className='w-full'>
+                    <input type="radio" id='closed' checked={props.level === "2"} onChange={()=>props.setLevel("2")} className='mr-1'/>
                     Niveau 2
-                    </label>
-                    <input type="radio" id='closed' checked={props.level === "3"} onChange={()=>props.setLevel("3")}/>
-                    <label className='w-full'>
+                </label>
+                <label className='w-full'>
+                    <input type="radio" id='closed' checked={props.level === "3"} onChange={()=>props.setLevel("3")} className='mr-1'/>
                     Niveau 3
-                    </label>
-                    <input type="radio" id='all' checked={props.level === null} onChange={()=>props.setLevel(null)}/>
-                    <label className='w-full'>
+                </label>
+                <label className='w-full'>
+                    <input type="radio" id='all' checked={props.level === null} onChange={()=>props.setLevel(null)} className='mr-1'/>
                     Tous
-                    </label>
+                </label>
                 </div>
                 <div className='flex justify-end w-full'>
                     <InputFieldTransparent value={props.searchTerm} placeholder="Rechercher un projet" onchange={(e)=>props.setSearchTerm(e.target.value)}/>
@@ -99,7 +100,10 @@ export function RewardsList(props:RewardsListProps){
                 style={{gridTemplateColumns:"repeat(auto-fit,minmax(200px,auto)"}} // handle automatic number of column in responsive
             >
                 {contributionsToDisplay && allContributions.map((contribution,index)=>(
-                    <ContributionCard key={index} contributions={contribution.account}/>
+                    <div key={index} className="flex flex-col items-center justify-center gap-2 w-full">
+                        <ContributionCard   contributions={contribution.account}/>
+                        <div className="w-full"><MainButtonLabel label="Acheter"/></div>
+                    </div>
                 ))}
             </div>
         </GrayDisplayBlock>
