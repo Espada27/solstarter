@@ -60,23 +60,27 @@ export function useSolstarterProgram() {
   const usersAccounts = useQuery({
     queryKey: ['user', 'all', { cluster }],
     queryFn: () => program.account.user.all(),
+    staleTime:60000
   });
 
   // function to call all the users accounts
   const projectsAccounts = useQuery({
     queryKey: ['project', 'all', { cluster }],
     queryFn: () => program.account.project.all(),
+    staleTime:60000
   });
 
   const contributionsAccounts = useQuery({
     queryKey: ['contribution', 'all', { cluster }],
     queryFn: () => program.account.contribution.all(),
+    staleTime:60000
   });
 
   // i don't know what this function does
   const getProgramAccount = useQuery({
     queryKey: ['get-program-account', { cluster }],
     queryFn: () => connection.getParsedAccountInfo(programId),
+    staleTime:60000
   });
 
   //* MUTATIONS
