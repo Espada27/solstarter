@@ -166,7 +166,7 @@ export function ProjectDetailFeature(props: ProjectDetailFeatureProps){
                         </div>
                         {/* barre de progression */}
                         <div className="w-full bg-gray-200 dark:bg-gray-700 z-0">
-                            <div className="bg-green-600 h-1.5" style={{width: `${percentage}%`}}></div>
+                            <div className="bg-green-600 h-1.5" style={{width: `${Math.min(percentage, 100)}%`}}></div>
                         </div>
                         {/* amount */}
                         <p className="text-2xl font-thin text-textColor-second dark:text-textColor-second-dark">

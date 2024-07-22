@@ -57,7 +57,7 @@ const ProjectCard = (props: Props) => {
           </div>
           {/* barre de progression */}
           <div className="w-full bg-gray-200 dark:bg-gray-700 z-0">
-            <div className="bg-green-600 h-1.5" style={{width: `${progressPercentage}%`}}></div>
+            <div className="bg-green-600 h-1.5" style={{width: `${Math.min(progressPercentage, 100)}%`}}></div>
           </div>
           {/* info */}
           <div className='bg-white flex flex-col z-10 w-full h-1/4 jus p-2 rounded-b-xl'>

@@ -27,7 +27,7 @@ export const millisecondsToDays = (milliseconds: number) => {
 };
 
 export const getProgressPercentage = (start: number, end: number) => {
-  return Math.min(Math.floor((start / end) * 100), 100);
+  return Math.floor((start / end) * 100);
 };
 
 export function getStatusString(status: any): string {
