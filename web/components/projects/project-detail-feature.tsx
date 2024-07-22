@@ -10,6 +10,7 @@ import MainButtonLabel from "../button/MainButtonLabel";
 import ContributionPopup from "../popup/ContributionPopup";
 import { useWallet } from "@solana/wallet-adapter-react";
 import { PublicKey } from "@solana/web3.js";
+import { getSolFromLamports } from "@/utils/utilsFunctions";
 
 
 type ProjectDetailFeatureProps = {
@@ -18,12 +19,13 @@ type ProjectDetailFeatureProps = {
 
 export function ProjectDetailFeature(props: ProjectDetailFeatureProps){
     const {publicKey} = useWallet();
-    const {projectsAccounts,usersAccounts,contributionsAccounts,programId} = useSolstarterProgram();
+    const {withdraw, projectsAccounts,usersAccounts,contributionsAccounts,programId} = useSolstarterProgram();
     const router = useRouter();
 
     const [projectToDisplay, setProjectToDisplay] = useState<Project | null>(null);
     const [ownerToDisplay, setOwnerToDisplay] = useState<User | null>(null);
     const [userAccountPublicKey, setUserAccountPublicKey] = useState<PublicKey | null>(null);
+    const [isProjectOwner, setIsProjectOwner] = useState<boolean | null>(null);
     const [contributionToDisplay, setContributionToDisplay] = useState<Contribution | null>(null);
     const [isShowContributionPopup, setIsShowContributionPopup] = useState(false);
 
@@ -36,7 +38,7 @@ export function ProjectDetailFeature(props: ProjectDetailFeatureProps){
             );
             if(projectData) setProjectToDisplay(projectData.account as Project);
         }
-     },[props.projectAccountPubkey,projectsAccounts.data]);
+     },[props.projectAccountPubkey, projectsAccounts.data]);
 
     //fetch the owner info
     useEffect(() => {
@@ -48,6 +50,14 @@ export function ProjectDetailFeature(props: ProjectDetailFeatureProps){
                 setOwnerToDisplay(ownerData.account as User);          }
         }
     },[projectToDisplay,usersAccounts.data]);
+
+    // check if the user is the owner of the project
+    useEffect(() => {
+        if (PublicKey && projectToDisplay){
+            const isOwner: boolean = publicKey?.equals(projectToDisplay?.ownerPubkey as PublicKey) ? true : false;
+            setIsProjectOwner(isOwner);
+        }
+    },[publicKey, projectToDisplay]);
 
     // fetch the contribution info if exist
     useEffect(() => {
@@ -63,7 +73,6 @@ export function ProjectDetailFeature(props: ProjectDetailFeatureProps){
                         ],
                         programId
                     );
-                    console.log("contributionPDA",contributionPDA.toString());
                     
                     // Fetch the contribution account if it exists
                     const contributionAccount = contributionsAccounts.data.find(
@@ -92,18 +101,21 @@ export function ProjectDetailFeature(props: ProjectDetailFeatureProps){
         }
     },[usersAccounts.data?.values,publicKey]);
 
+    const handleWithdraw = async () => {
+        try{
+            await withdraw.mutateAsync({
+                projectAccountPublicKey: new PublicKey(props.projectAccountPubkey),
+            });
+        } catch (error){
+            console.error('error',error);
+        }
+        
+    }
+
     if (projectsAccounts.isPending) return <LoaderSmall/>;
 
     if(!projectToDisplay) return <StandardErrorDisplay/>;
 
-    //* TEST
-    // console.log("projectToDisplay",projectToDisplay);
-    // console.log("ownerToDisplay",ownerToDisplay);
-    // console.log("contributionAccounts",contributionsAccounts.data && contributionsAccounts.data[0].publicKey.toString());
-    // console.log("contributionToDisplay",contributionToDisplay);
-    // console.log("projectPubkey",props.projectAccountPubkey.toString());
-    // console.log("userAccountPublicKey",userAccountPublicKey?.toString())
-    
     return (
         <div className='w-full mx-auto flex flex-col items-start justify-start gap-4'>
             <div className="flex justify-start w-full">
@@ -120,15 +132,17 @@ export function ProjectDetailFeature(props: ProjectDetailFeatureProps){
                 </div>
                 <div className="flex flex-col items-start justify-between w-full gap-4">
                     <p>Montant des contributions</p>
-                    <p>{projectToDisplay.raisedAmount.toString()} SOL sur {projectToDisplay.goalAmount.toString()} SOL </p>
+                    <p>{getSolFromLamports(projectToDisplay.raisedAmount)} SOL sur {getSolFromLamports(projectToDisplay.goalAmount)} SOL </p>
                     {/* interaction */}
                     <div className="flex flex-col md:flex-row justify-center items-center gap-4 w-full">
                         <button className="w-1/3" onClick={()=>setIsShowContributionPopup(true)}><MainButtonLabel label="Contribuer au projet"/></button>
+                        {isProjectOwner && (
+                            <button className="w-1/3" onClick={()=>handleWithdraw()}><MainButtonLabel label="Récolter les fonds"/></button>
+                        )}
                         <button className="w-1/3">
                             <div className={`flex justify-center items-center rounded-full bg-accentColor  hover:bg-accentColor/50  text-h3 text-white  text-center px-2 py-4 transition-all`}>
                              Partager sur X
                             </div>
-
                         </button>
                     </div>
                 </div>

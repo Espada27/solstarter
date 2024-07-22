@@ -25,7 +25,7 @@ fn validate_project_status(project: &Account<Project>) -> Result<()> {
 fn transfer_funds(ctx: &Context<AddContribution>, amount: u64) -> Result<()> {
     let transfer_instruction = Transfer {
         from: ctx.accounts.wallet_pubkey.to_account_info(),
-        to: ctx.accounts.contribution.to_account_info(),
+        to: ctx.accounts.project.to_account_info(),
     };
     let cpi_ctx = CpiContext::new(
         ctx.accounts.system_program.to_account_info(),

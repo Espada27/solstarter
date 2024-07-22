@@ -5,7 +5,7 @@ import { BN, Program } from '@coral-xyz/anchor';
 import { useConnection } from '@solana/wallet-adapter-react';
 import { Cluster, Keypair, PublicKey } from '@solana/web3.js';
 import { useMutation, useQuery } from '@tanstack/react-query';
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import toast from 'react-hot-toast';
 import { useCluster } from '../cluster/cluster-data-access';
 import { useAnchorProvider } from '../solana/solana-provider';
@@ -38,10 +38,15 @@ interface ContributionArg {
   amount: number
 }
 
+interface WithdrawArgs {
+  projectAccountPublicKey: PublicKey,
+}
+
 export function useSolstarterProgram() {
   const { connection } = useConnection();
   const { cluster } = useCluster();
-  const router = useRouter()
+  const [newProjectAddress, setNewProjectAddress] = useState<PublicKey | null>(null);
+  const router = useRouter();
   const transactionToast = useTransactionToast();
   const provider = useAnchorProvider();
   const programId = useMemo(
@@ -124,7 +129,8 @@ export function useSolstarterProgram() {
         ],
         programId
       )
-      console.log("counter",userProjectCounter);
+
+      setNewProjectAddress(newProjectAddress);
 
       // Rewards serialization
       const serializedRewards = rewards.map((reward) => ({
@@ -139,12 +145,12 @@ export function useSolstarterProgram() {
         .rpc(); // launch the transaction
 
     },
-    onSuccess: (signature) => {
+    onSuccess: async (signature) => {
       transactionToast(signature);
       projectsAccounts.refetch();
-      router.push('/myprofile');
+      router.push(`/projects/${newProjectAddress}`);
     },
-    onError: () => toast.error('Erreur dans l\'execution du programme'),
+    onError: async () => toast.error('Erreur dans l\'execution du programme'),
   });
 
   const addContribution = useMutation<string,Error,ContributionArg>({
@@ -178,6 +184,28 @@ export function useSolstarterProgram() {
     onError: () => toast.error('Erreur dans l\'execution du programme'),
   });
 
+  /* Only the project owner can withdraw the funds */
+  const withdraw = useMutation<string, Error, WithdrawArgs>({
+    mutationKey: ['solstarter', 'withdraw', { cluster }],
+    mutationFn: async ({
+      projectAccountPublicKey
+    }): Promise<string> => {
+
+      // Execute the transaction
+      await program.methods
+        .withdraw()
+        .accountsPartial({project: projectAccountPublicKey})
+        .rpc();
+
+      return 'Withdrawal successful';
+    },
+    onSuccess: async (signature) => {
+      transactionToast(signature);
+      projectsAccounts.refetch();
+    },
+    onError: async () => toast.error('Erreur dans l\'execution du programme'),
+  });
+
   return {
     program,
     programId,
@@ -187,6 +215,7 @@ export function useSolstarterProgram() {
     projectsAccounts,
     createProject,
     addContribution,
-    contributionsAccounts
+    contributionsAccounts,
+    withdraw,
   };
 }
