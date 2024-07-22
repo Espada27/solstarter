@@ -1,7 +1,6 @@
 'use client';
 
 import { AppHero } from '../ui/ui-layout';
-import HighlightProjects from './highlight-projects';
 import MainButtonLabel from '../button/MainButtonLabel';
 import Link from 'next/link';
 import { useSolstarterProgram } from '../solstarter/solstarter-data-access';
@@ -9,6 +8,7 @@ import { useEffect, useState } from 'react';
 import { getSolFromLamports } from '@/utils/utilsFunctions';
 import { BN } from '@coral-xyz/anchor';
 import MainButtonLabelBig from '../button/MainButtonLabelBig';
+import HighlightProjects from './highlight-projects';
 
 
 export default function HomepageFeature() {

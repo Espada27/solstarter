@@ -33,7 +33,14 @@ export const getProgressPercentage = (start: number, end: number) => {
 export function getStatusString(status: any): string {
   if (status.draft) return 'draft';
   if (status.ongoing) return 'ongoing';
-  if (status.completed) return 'completed';
-  if (status.abandoned) return 'abandoned';
+  if(status.completed) return 'completed';
+  if(status.abandoned) return 'abandoned';
   return 'unknown';
+}
+
+export function truncateString(str: string, maxLength: number): string {
+  if (str.length <= maxLength) {
+      return str;
+  }
+  return str.slice(0, maxLength) + '...';
 }
