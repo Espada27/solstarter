@@ -11,6 +11,7 @@ import SecondaryButtonLabel from '../button/SecondaryButtonLabel';
 import { PublicKey } from '@solana/web3.js';
 import { useSolstarterProgram } from '../solstarter/solstarter-data-access';
 import { getSolFromLamports } from '@/utils/utilsFunctions';
+import Divider from '../displayElements/Divider';
 
 
 type Props = {
@@ -69,37 +70,39 @@ const ContributionPopup = (props: Props) => {
     }
 
     return (
-        <PopupLayout padding="4" justify="start" item="start">
+        <PopupLayout padding="8" justify="start" item="start">
             <div className=
-                'bg-mainColor dark:bg-mainColorDark flex flex-col items-center justify-center gap-4 rounded-xl p-4'
+                'bg-mainColor dark:bg-mainColorDark flex flex-col items-center justify-center gap-4 rounded-xl p-8'
             >
                 <button onClick={()=>props.closePopup()} className='w-full flex justify-end'><IoMdClose size={30}/></button>
-                <h3>Contribuer au projet {props.project.name}</h3>
+                <h3 className='text-xl'>Contribuer au projet {props.project.name}</h3>
                 {props.contribution ? 
                     <div className='flex flex-col items-center justify-center gap-4'>
-                        <p>Votre contribution actuelle à ce projet</p>
-                        <p>{getSolFromLamports(props.contribution.amount)} SOL</p>
+                        <p className='text-textColor-second dark:text-textColor-second-dark'>Votre contribution actuelle à ce projet</p>
+                        <p className='text-3xl font-bold'>{getSolFromLamports(props.contribution.amount)} SOL</p>
                     </div>
                 :
-                    <p>Vous n&apos;avez pas encore contribué à ce projet</p>
+                    <p className='text-textColor-second dark:text-textColor-second-dark'>Vous n&apos;avez pas encore contribué à ce projet</p>
                 }
                 {/* contribution level */}
+                <Divider/>
+                <p className='text-textColor-second dark:text-textColor-second-dark my-4'>Choisissez un niveau de contribution :</p>
                 <div className='flex justify-between items-center w-full'>
                     {props.project.rewards.map((reward, index) => (
                         <button 
                             key={index} 
                             onClick={()=>setContributionAmount(reward.rewardAmount)}
-                            className='flex flex-col items-center justify-center gap-4'>
-                            <p>{reward.rewardAmount} SOL</p>
+                            className={`${index === 0 && "bg-green-600" } ${index === 1 && "bg-emerald-600" } ${index === 2 && "bg-teal-600" } rounded-full p-2`}>
+                            <p className="text-center font-bold flex flex-col justify-center items-center gap-1 text-lg p-4 h-20 rounded-full aspect-square bg-gray-400 ">{reward.rewardAmount} SOL</p>
                         </button>
                     ))}
                 </div>
                 <DividerOr/>
                 {/* free contribution  */}
-                <p>Contribution libre</p>
+                <p className='text-textColor-second dark:text-textColor-second-dark my-4'>Contribution libre</p>
                 <InputFieldTransparentNumber placeholder='Saisir le montant' onchange={handleContributionAmountChange} value={contributionAmount}/>
                 {/* button */}
-                <div className='flex flex-col md:flex-row justify-center items-center gap-4 w-full'>
+                <div className='flex flex-col md:flex-row justify-center items-center gap-4 w-full mt-10'>
                     <button className='w-full md:w-1/2' onClick={props.closePopup}>
                         <SecondaryButtonLabel label='Annuler'/>
                     </button>

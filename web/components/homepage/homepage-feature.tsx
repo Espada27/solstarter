@@ -1,8 +1,6 @@
 'use client';
 
-import { projects } from '@/data/localdata';
 import { AppHero } from '../ui/ui-layout';
-import HighlightProjects from './highlight-projects';
 import MainButtonLabel from '../button/MainButtonLabel';
 import Link from 'next/link';
 import { useSolstarterProgram } from '../solstarter/solstarter-data-access';
@@ -10,6 +8,7 @@ import { useEffect, useState } from 'react';
 import { getSolFromLamports } from '@/utils/utilsFunctions';
 import { BN } from '@coral-xyz/anchor';
 import MainButtonLabelBig from '../button/MainButtonLabelBig';
+import HighlightProjects from './highlight-projects';
 
 
 export default function HomepageFeature() {
@@ -36,7 +35,7 @@ export default function HomepageFeature() {
         <span className='text-accentColor font-bold'>{getSolFromLamports(totalAmount) } </span>
         SOL</h3>
       <h3 className='text-2xl p-2 text-center'>Les plus gros succès</h3>
-      <HighlightProjects projects={projects} />
+      <HighlightProjects projects={[]} />
       <div className='w-full md:w-1/4 mx-auto py-10'>
         <Link href={"/createproject"}><MainButtonLabelBig label='Proposer un projet'/></Link>
       </div>
