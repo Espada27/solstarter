@@ -35,7 +35,7 @@ export default function HomepageFeature() {
         <span className='text-accentColor font-bold'>{getSolFromLamports(totalAmount) } </span>
         SOL</h3>
       <h3 className='text-2xl p-2 text-center'>Les plus gros succès</h3>
-      <HighlightProjects projects={projects} />
+      <HighlightProjects projects={[]} />
       <div className='w-full md:w-1/4 mx-auto py-10'>
         <Link href={"/createproject"}><MainButtonLabelBig label='Proposer un projet'/></Link>
       </div>
