@@ -10,7 +10,7 @@ import MainButtonLabel from "../button/MainButtonLabel";
 import ContributionPopup from "../popup/ContributionPopup";
 import { useWallet } from "@solana/wallet-adapter-react";
 import { PublicKey } from "@solana/web3.js";
-import { getLamportsFromSol, getSolFromLamports, getStatusString } from "@/utils/utilsFunctions";
+import { getProgressPercentage, getSolFromLamports, getStatusString } from "@/utils/utilsFunctions";
 import { ProjectStatus } from "@/data/enum";
 import { set } from "@coral-xyz/anchor/dist/cjs/utils/features";
 import { Audiowide} from "next/font/google";
@@ -46,7 +46,7 @@ export function ProjectDetailFeature(props: ProjectDetailFeatureProps){
             );
             if(projectData) {
                 setProjectToDisplay(projectData.account as Project);
-                setPercentage((projectData.account.raisedAmount / projectData.account.goalAmount) * 100);
+                setPercentage(getProgressPercentage(projectData.account.raisedAmount, projectData.account.goalAmount));
             }
         }
      },[props.projectAccountPubkey, projectsAccounts.data]);
@@ -137,16 +137,6 @@ export function ProjectDetailFeature(props: ProjectDetailFeatureProps){
             console.error('Erreur lors de la copie du lien:', error);
         });
     }
-
-    //* TEST
-    console.log("projectToDisplay",projectToDisplay);
-    console.log("isCompleted",isCompleted);
-    console.log("raisedAmount",projectToDisplay?.raisedAmount.toString());
-    console.log("goalAmount",projectToDisplay?.goalAmount.toString())
-    
-    
-    
-    
 
     if (projectsAccounts.isPending) return <LoaderSmall/>;
 
