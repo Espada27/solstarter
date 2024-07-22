@@ -5,7 +5,7 @@ import { BN, Program } from '@coral-xyz/anchor';
 import { useConnection } from '@solana/wallet-adapter-react';
 import { Cluster, Keypair, PublicKey } from '@solana/web3.js';
 import { useMutation, useQuery } from '@tanstack/react-query';
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import toast from 'react-hot-toast';
 import { useCluster } from '../cluster/cluster-data-access';
 import { useAnchorProvider } from '../solana/solana-provider';
@@ -45,7 +45,8 @@ interface WithdrawArgs {
 export function useSolstarterProgram() {
   const { connection } = useConnection();
   const { cluster } = useCluster();
-  const router = useRouter()
+  const [newProjectAddress, setNewProjectAddress] = useState<PublicKey | null>(null);
+  const router = useRouter();
   const transactionToast = useTransactionToast();
   const provider = useAnchorProvider();
   const programId = useMemo(
@@ -128,7 +129,8 @@ export function useSolstarterProgram() {
         ],
         programId
       )
-      console.log("counter",userProjectCounter);
+
+      setNewProjectAddress(newProjectAddress);
 
       // Rewards serialization
       const serializedRewards = rewards.map((reward) => ({
@@ -146,7 +148,7 @@ export function useSolstarterProgram() {
     onSuccess: async (signature) => {
       transactionToast(signature);
       projectsAccounts.refetch();
-      router.push('/projects/${newProjectAddress}');
+      router.push(`/projects/${newProjectAddress}`);
     },
     onError: async () => toast.error('Erreur dans l\'execution du programme'),
   });
