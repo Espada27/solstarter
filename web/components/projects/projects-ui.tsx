@@ -10,6 +10,8 @@ import ProjectCard from "../cards/ProjectCard";
 type ProjectFilterProps = {
     status: "ongoing" | "closed" | null;
     setStatus: (status: "ongoing" | "closed" | null) => void;
+    searchTerm: string;
+    setSearchTerm: (term: string) => void;
 }
 
 export function ProjectFilter(props:ProjectFilterProps){
@@ -31,7 +33,7 @@ export function ProjectFilter(props:ProjectFilterProps){
                     </label>
                 </div>
                 <div className='flex justify-end w-full'>
-                    <InputFieldTransparent value='' placeholder="Non fonctionnel pour l'instant" onchange={()=>{console.log('change')}}/>
+                    <InputFieldTransparent value={props.searchTerm} placeholder="Rechercher un projet" onchange={(e)=>props.setSearchTerm(e.target.value)}/>
                 </div>
             </div>
         </GrayDisplayBlock>
@@ -42,6 +44,7 @@ export function ProjectFilter(props:ProjectFilterProps){
 //* PROJECTS LIST
 type ProjectListProps = {
     seletedStatus: "ongoing" | "closed" | null;
+    searchTerm: string;
 }
 export function ProjectList(props:ProjectListProps){
     const {projectsAccounts} = useSolstarterProgram();
@@ -67,12 +70,18 @@ export function ProjectList(props:ProjectListProps){
 
     // update project function of selected status
     useEffect(() => {
-        if (props.seletedStatus){
-            setProjectsToDisplay(allProjects.filter(project  =>getStatusString(project.account.status) === props.seletedStatus));
-        } else {
-            setProjectsToDisplay(allProjects);
+        let filteredProjects = allProjects;
+
+        if (props.seletedStatus) {
+            filteredProjects = filteredProjects.filter(project => getStatusString(project.account.status) === props.seletedStatus);
         }
-    }, [props.seletedStatus]);
+
+        if (props.searchTerm) {
+            filteredProjects = filteredProjects.filter(project => project.account.name.toLowerCase().includes(props.searchTerm.toLowerCase()));
+        }
+
+        setProjectsToDisplay(filteredProjects);
+    }, [props.seletedStatus, props.searchTerm, allProjects]);
 
     //* TEST
     // console.log("projectsAccounts",projectsAccounts.data);
@@ -84,11 +93,11 @@ export function ProjectList(props:ProjectListProps){
                 style={{gridTemplateColumns:"repeat(auto-fit,minmax(420px,auto)"}} // handle automatic number of column in responsive
             >
                 {/* if not filter */}
-                {props.seletedStatus === null && allProjects && allProjects.map((project ,index)=>(
+                {props.seletedStatus === null && props.searchTerm==="" && allProjects && allProjects.map((project ,index)=>(
                     <ProjectCard key={index} project={project.account} projectAccountPubkey={project.publicKey}/>
                 ))}
                 {/* if filter */}
-                {props.seletedStatus && projectsToDisplay && projectsToDisplay.map((project,index)=>(
+                {(props.seletedStatus || props.searchTerm)&& projectsToDisplay && projectsToDisplay.map((project,index)=>(
                     <ProjectCard key={index} project={project.account} projectAccountPubkey={project.publicKey}/>
                 ))}
             </div>

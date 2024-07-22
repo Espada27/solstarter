@@ -10,6 +10,9 @@ export { Solstarter, SolstarterIDL };
 // The programId is imported from the program IDL.
 export const SOLSTARTER_PROGRAM_ID = new PublicKey(SolstarterIDL.address);
 
+// The public key of all the community contributions
+export const COMMUNITY_CONTRIBUTOR_PUBKEY = new PublicKey(SolstarterIDL.address);
+
 // This is a helper function to get the Solstarter Anchor program.
 export function getSolstarterProgram(provider: AnchorProvider) {
   return new Program(SolstarterIDL as Solstarter, provider);

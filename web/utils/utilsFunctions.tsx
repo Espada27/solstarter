@@ -29,3 +29,11 @@ export const millisecondsToDays = (milliseconds: number) => {
 export const getProgressPercentage = (start: number, end: number) => {
   return Math.floor(start / end * 100)
 };
+
+export function getStatusString(status: any): string {
+  if (status.draft) return 'draft';
+  if (status.ongoing) return 'ongoing';
+  if (status.completed) return 'completed';
+  if (status.abandoned) return 'abandoned';
+  return 'unknown';
+}

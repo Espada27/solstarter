@@ -73,7 +73,7 @@ describe("solstarter", () => {
           projectData.name,
           projectData.image_url,
           projectData.project_description,
-          new BN(Math.floor(projectData.created_time / 1000)),
+          projectData.goal_amount,
           new BN(Math.floor(projectData.end_time / 1000)),
           serializedRewards
         )
@@ -140,16 +140,15 @@ describe("solstarter", () => {
   let userPk1, userPk2, userPk3: PublicKey;	// userPda1 and userPda2
   let projectPk1: PublicKey;	// projectPda1, projectPda2 and projectPda3 
   let contributionPk1, contributionPk2, contributionPk3: PublicKey;	// contributionPda1, contributionPda2 and contributionPda3
-  let fetchedUser1;
+  let fetchedUser1, fetchedProject1;
 
 
-  it("should contribute and withdraw for one project", async () => {
+  it("should create 1 project and 1 contribution", async () => {
+
     // New wallet + airdrop
     wallet1 = await create_wallet_with_sol(); // Project Owner 
     wallet2 = await create_wallet_with_sol(); // Contributor 1
     wallet3 = await create_wallet_with_sol(); // Contributor 2
-
-    console.log("wallet1 Start Balance => ", await program.provider.connection.getBalance(wallet1.publicKey) / LAMPORTS_PER_SOL);
 
     // Create user1
     userPk1 = await create_user_pda(userData1, wallet1);
@@ -167,45 +166,112 @@ describe("solstarter", () => {
         wallet1
     );
 
-
-    const wallet1BalanceBeforeContribute = await program.provider.connection.getBalance(wallet1.publicKey);
-    const project1BalanceBeforeContribute = await program.provider.connection.getBalance(projectPk1);
-
-    console.log("wallet1BalanceBeforeContribute", wallet1BalanceBeforeContribute / LAMPORTS_PER_SOL);
-    console.log("project1BalanceBeforeContribute", project1BalanceBeforeContribute / LAMPORTS_PER_SOL);
-
     // Send contributions
     contributionPk1 = await contribute(wallet2, userPk2, projectPk1, 600 * LAMPORTS_PER_SOL);
-    contributionPk2 = await contribute(wallet3, userPk3, projectPk1, 400 * LAMPORTS_PER_SOL);
+    const fetchedContribution = await program.account.contribution.fetch(contributionPk1);
+    fetchedProject1 = await program.account.project.fetch(projectPk1);
+    
+    expect(anchor.BN(fetchedContribution.amount).toNumber()).toEqual(600 * LAMPORTS_PER_SOL);
+    expect(anchor.BN(fetchedProject1.raisedAmount).toNumber()).toEqual(600 * LAMPORTS_PER_SOL);
+  });
 
+  it("should failed to withdraw by raised amount error", async () => {
+    
+    // Withdraw funds
     const wallet1BalanceBeforeWithdraw = await program.provider.connection.getBalance(wallet1.publicKey);
     const project1BalanceBeforeWithdraw = await program.provider.connection.getBalance(projectPk1);
 
-    console.log("wallet1BalanceBefore", wallet1BalanceBeforeWithdraw / LAMPORTS_PER_SOL);
-    console.log("project1BalanceBefore", project1BalanceBeforeWithdraw / LAMPORTS_PER_SOL);
-
     // Withdraw funds
-    await withdraw(projectPk1, wallet1);
+    try {
+      await withdraw(projectPk1, wallet1);
+    } catch (err) {
+      expect(err).toHaveProperty("error");
+      expect(err.error.errorCode.code).toEqual("UnreachedGoalAmount");
+    }
+    
+    fetchedProject1 = await program.account.project.fetch(projectPk1);
 
     // Check wallet1 balance
     const wallet1BalanceAfter = await program.provider.connection.getBalance(wallet1.publicKey);
     const project1BalanceAfter = await program.provider.connection.getBalance(projectPk1);
 
-    // Should be in local test validator 0
-    const txCost = wallet1BalanceAfter - wallet1BalanceBeforeWithdraw - (1000 * LAMPORTS_PER_SOL);
-
-    console.log("wallet1BalanceAfter", wallet1BalanceAfter / LAMPORTS_PER_SOL);
-    console.log("txCost", txCost / LAMPORTS_PER_SOL);
-    console.log("project1BalanceAfter", project1BalanceAfter / LAMPORTS_PER_SOL);
-
     // Wallet1 should have 
-    expect(wallet1BalanceAfter).toEqual(wallet1BalanceBeforeWithdraw + (1000 * LAMPORTS_PER_SOL) - txCost);
-    expect(project1BalanceAfter).toEqual(project1BalanceBeforeWithdraw - (1000 * LAMPORTS_PER_SOL));
-
+    expect(anchor.BN(fetchedProject1.raisedAmount).toNumber()).toEqual(600 * LAMPORTS_PER_SOL);
+    expect(wallet1BalanceAfter).toEqual(wallet1BalanceBeforeWithdraw);
+    expect(project1BalanceAfter).toEqual(project1BalanceBeforeWithdraw);
   });
 
-  it("it should generate 3 contributions", async () => {
-    // Create contributions    
+  it("should contribute to reach goal amount", async () => {
 
+    // Create contributions    
+    contributionPk2 = await contribute(wallet3, userPk3, projectPk1, 400 * LAMPORTS_PER_SOL);
+    fetchedProject1 = await program.account.project.fetch(projectPk1);
+    expect(anchor.BN(fetchedProject1.raisedAmount).toNumber()).toEqual((600 + 400) * LAMPORTS_PER_SOL);
+  });
+
+  it("should failed to withdraw by ownership error", async () => {
+
+    const walletBalanceBeforeWithdraw = await program.provider.connection.getBalance(wallet2.publicKey);
+    const project1BalanceBeforeWithdraw = await program.provider.connection.getBalance(projectPk1);
+
+    // Withdraw funds
+    try {
+      await withdraw(projectPk1, wallet2);
+    } catch (err) {
+      expect(err).toHaveProperty("error");
+      expect(err.error.errorCode.code).toEqual("ConstraintHasOne");
+    }
+
+    fetchedProject1 = await program.account.project.fetch(projectPk1);
+
+    // Check wallet1 balance
+    const walletBalanceAfter = await program.provider.connection.getBalance(wallet2.publicKey);
+    const project1BalanceAfter = await program.provider.connection.getBalance(projectPk1);
+
+    // Wallet1 should have 
+    expect(anchor.BN(fetchedProject1.raisedAmount).toNumber()).toEqual((600 + 400) * LAMPORTS_PER_SOL);
+    expect(walletBalanceAfter).toEqual(walletBalanceBeforeWithdraw);
+    expect(project1BalanceAfter).toEqual(project1BalanceBeforeWithdraw);
+  });
+  
+  it("should success to withdraw", async () => {
+ 
+    const walletBalanceBeforeWithdraw = await program.provider.connection.getBalance(wallet1.publicKey);
+    const project1BalanceBeforeWithdraw = await program.provider.connection.getBalance(projectPk1);
+
+    // Withdraw funds
+    await withdraw(projectPk1, wallet1);
+
+    fetchedProject1 = await program.account.project.fetch(projectPk1);
+
+    // Check wallet1 balance
+    const walletBalanceAfter = await program.provider.connection.getBalance(wallet1.publicKey);
+    const project1BalanceAfter = await program.provider.connection.getBalance(projectPk1);
+
+    // Should be 0 on local test validator
+    const txCost = walletBalanceAfter - walletBalanceBeforeWithdraw - (1000 * LAMPORTS_PER_SOL);
+
+    // Wallet1 should have 
+    expect(walletBalanceAfter).toEqual(walletBalanceBeforeWithdraw + (1000 * LAMPORTS_PER_SOL) - txCost);
+    expect(project1BalanceAfter).toEqual(project1BalanceBeforeWithdraw - (1000 * LAMPORTS_PER_SOL));
+  });
+
+  it("should fail to contribute on project", async () => {
+
+    const walletBalanceBefore = await program.provider.connection.getBalance(wallet3.publicKey);
+    
+    // Create contribution
+    try {
+      await contribute(wallet3, userPk3, projectPk1, 10 * LAMPORTS_PER_SOL);
+    } catch (err) {
+      expect(err).toHaveProperty("error");
+      expect(err.error.errorCode.code).toEqual("ProjectNotOngoing");
+    }
+    const walletBalanceAfter = await program.provider.connection.getBalance(wallet3.publicKey);
+    expect(walletBalanceAfter).toEqual(walletBalanceBefore);
+
+    fetchedProject1 = await program.account.project.fetch(projectPk1);
+    expect(anchor.BN(fetchedProject1.raisedAmount).toNumber()).toEqual((600 + 400) * LAMPORTS_PER_SOL);
+    
   });
 });
