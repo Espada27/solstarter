@@ -17,6 +17,10 @@ import toast, { Toaster } from 'react-hot-toast';
 import { useWallet } from '@solana/wallet-adapter-react';
 import GrayDisplayBlock from '../displayElements/GrayDisplayBlock';
 import MainButtonLabel from '../button/MainButtonLabel';
+import { Audiowide} from "next/font/google";
+
+const audioWide = Audiowide({weight: '400',subsets: ['latin']});
+
 
 export function UiLayout({
   children,
@@ -35,8 +39,8 @@ export function UiLayout({
       <div className="navbar bg-base-300  flex-col md:flex-row space-y-2 md:space-y-0 fixed top-0 left-0 z-20">
         <div className="flex-1">
           <Link className="btn btn-ghost normal-case text-xl" href="/">
-            <p>SOLSTARTER</p>
-            {/* <img className="h-4 md:h-6" alt="Logo" src="/logo.png" /> */}
+            <img className="h-4 md:h-12 block dark:hidden" alt="Logo" src="/images/logo_light.png" />
+            <img className="h-4 md:h-12 dark:block hidden" alt="Logo" src="/images/logo_dark.png" />
           </Link>
           <ul className="menu menu-horizontal px-1 space-x-2">
             {links.map(({ label, path }) => (
@@ -156,18 +160,21 @@ export function AppHero({
   return (
     <div className="hero py-[64px]">
       <div className="hero-content text-center">
-        <div className="max-w-2xl">
-          {typeof title === 'string' ? (
-            <h1 className="text-5xl font-bold">{title}</h1>
-          ) : (
-            title
-          )}
-          {typeof subtitle === 'string' ? (
-            <p className="py-6">{subtitle}</p>
-          ) : (
-            subtitle
-          )}
-          {children}
+        <div className={audioWide.className}>
+          <div className="max-w-2xl">
+            {typeof title === 'string' ? (
+                  <h1 className="text-5xl font-bold">{title}</h1>
+
+                ) : (
+                  title
+                )}
+            {typeof subtitle === 'string' ? (
+              <p className="py-6 text-textColor-second dark:text-textColor-second-dark">{subtitle}</p>
+            ) : (
+              subtitle
+            )}
+            {children}
+          </div>
         </div>
       </div>
     </div>

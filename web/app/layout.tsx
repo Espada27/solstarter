@@ -22,6 +22,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
+    <link rel="icon" href="/favicons/favicon.ico" sizes="any" />
       <body>
         <ReactQueryProvider>
           <ClusterProvider>
