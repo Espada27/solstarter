@@ -6,6 +6,7 @@ import { useSolstarterProgram } from "../solstarter/solstarter-data-access";
 import { extractAccountsData } from "@/utils/utilsFunctions";
 import ProjectCard from "../cards/ProjectCard";
 import ContributionCard from "../cards/ContributionCard";
+import MainButtonLabel from "../button/MainButtonLabel";
 
 //* FILTERS
 type RewardsFilterProps = {
@@ -99,7 +100,10 @@ export function RewardsList(props:RewardsListProps){
                 style={{gridTemplateColumns:"repeat(auto-fit,minmax(200px,auto)"}} // handle automatic number of column in responsive
             >
                 {contributionsToDisplay && allContributions.map((contribution,index)=>(
-                    <ContributionCard key={index} contributions={contribution.account}/>
+                    <div key={index} className="flex flex-col items-center justify-center gap-2 w-full">
+                        <ContributionCard   contributions={contribution.account}/>
+                        <div className="w-full"><MainButtonLabel label="Acheter"/></div>
+                    </div>
                 ))}
             </div>
         </GrayDisplayBlock>

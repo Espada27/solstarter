@@ -182,7 +182,10 @@ export function ContributionsTab({userContributions}:{userContributions:AccountW
                 style={{gridTemplateColumns:"repeat(auto-fit,minmax(200px,auto)"}} // handle automatic number of column in responsive
             >
             {userContributions && userContributions.map((contribution, index) => (
-              <ContributionCard key={index} contributions={contribution.account}/>
+              <div key={index} className="flex flex-col items-center justify-center gap-2 w-full">
+                <ContributionCard contributions={contribution.account}/>
+                <div className="w-full"><MainButtonLabel label="Vendre"/></div>
+              </div>
             ))}
           </div>
         </div>

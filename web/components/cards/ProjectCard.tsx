@@ -50,7 +50,9 @@ const ProjectCard = (props: Props) => {
       >
           <div className='w-[420px] h-[230px] relative'>
             <div className={`absolute flex rounded-full ${remainingTimeBadge === "Terminé" ? "bg-gray-400/70 text-gray-800" : "bg-green-200/80 text-green-800"  }    text-sm font-semibold px-3 py-1 bottom-2 left-2`}>{remainingTimeBadge}</div>
-            <div className='absolute flex rounded-full  bg-accentColor/80 text-white text-sm font-semibold px-3 py-1 bottom-2 right-2'>{getSolFromLamports(props.project.goalAmount).toString()} SOL</div>
+            <div className='absolute flex justify-center items-center gap-1 rounded-full  bg-accentColor/80 text-white text-sm font-semibold px-3 py-1 bottom-2 right-2'>{getSolFromLamports(props.project.goalAmount).toString()} 
+              <Image alt="sol" src={'/images/logo_sol_white.png'} width={15} height={15}/> 
+            </div>
               <Image src={props.project.imageUrl} alt='project image' width={420} height={230}  className='object-cover aspect-video rounded-t-xl' />
           </div>
           {/* barre de progression */}

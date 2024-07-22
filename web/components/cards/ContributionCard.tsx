@@ -63,7 +63,11 @@ const ContributionCard = (props: Props) => {
             </div>
             <div className='flex flex-col items-start justify-center gap-2 p-2 bg-white h-1/3 rounded-b-xl w-full'>
                 <p className='text-textColor-main'>{projectToDisplay.account.name}</p>
-                <p className='text-textColor-second'>Montant : {getSolFromLamports(props.contributions.amount).toString() } SOL</p>
+                <div className='flex justify-start items-center gap-1'>
+                    <p className='text-textColor-second'>Montant : {getSolFromLamports(props.contributions.amount).toString() } </p>
+                    <Image alt="sol" src={'/images/logo_sol_black.png'} width={15} height={15}/> 
+                </div>
+                
             </div>
         </Link>
     )

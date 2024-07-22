@@ -170,7 +170,8 @@ export function ProjectDetailFeature(props: ProjectDetailFeatureProps){
                         </div>
                         {/* amount */}
                         <p className="text-2xl font-thin text-textColor-second dark:text-textColor-second-dark">
-                            {getSolFromLamports(projectToDisplay.raisedAmount).toString() } SOL sur {getSolFromLamports(projectToDisplay.goalAmount).toString()} SOL
+                            {getSolFromLamports(projectToDisplay.raisedAmount).toString() } sur {getSolFromLamports(projectToDisplay.goalAmount).toString()} SOL
+
                         </p>
                     </div>
                     {/* second row */}
@@ -210,8 +211,10 @@ export function ProjectDetailFeature(props: ProjectDetailFeatureProps){
                             <div key={index} className="flex flex-col items-center justify-start gap-2">
                                 <p>Niveau {index+1} </p>
                                 <div className={`${index === 0 && "bg-green-600" } ${index === 1 && "bg-emerald-600" } ${index === 2 && "bg-teal-600" } rounded-full p-2`}>
-                                    <p className="text-center font-bold flex flex-col justify-center items-center gap-1 text-3xl p-4 h-32 rounded-full aspect-square bg-gray-400 " >
-                                        {reward.rewardAmount} <span className="text-xl font-normal">sol</span>
+                                    <p className="text-center font-bold flex  justify-center items-center gap-2 text-3xl p-4 h-32 rounded-full aspect-square bg-gray-400 " >
+                                        {reward.rewardAmount}
+                                        <Image alt="sol" src={'/images/logo_sol_black.png'} width={30} height={30} className="block dark:hidden"/> 
+                                        <Image alt="sol" src={'/images/logo_sol_white.png'} width={30} height={30} className="hidden dark:block"/> 
                                     </p>
                                 </div>
                                 <p className="text-textColor-second dark:text-textColor-second-dark text-center">{reward.rewardDescription}</p>
