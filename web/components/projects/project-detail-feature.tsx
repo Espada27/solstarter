@@ -10,7 +10,8 @@ import MainButtonLabel from "../button/MainButtonLabel";
 import ContributionPopup from "../popup/ContributionPopup";
 import { useWallet } from "@solana/wallet-adapter-react";
 import { PublicKey } from "@solana/web3.js";
-import { getSolFromLamports } from "@/utils/utilsFunctions";
+import { getSolFromLamports, getStatusString } from "@/utils/utilsFunctions";
+import { ProjectStatus } from "@/data/enum";
 
 
 type ProjectDetailFeatureProps = {
@@ -135,7 +136,9 @@ export function ProjectDetailFeature(props: ProjectDetailFeatureProps){
                     <p>{getSolFromLamports(projectToDisplay.raisedAmount)} SOL sur {getSolFromLamports(projectToDisplay.goalAmount)} SOL </p>
                     {/* interaction */}
                     <div className="flex flex-col md:flex-row justify-center items-center gap-4 w-full">
+                        {getStatusString(projectToDisplay.status) != ProjectStatus.Completed.toString() && (
                         <button className="w-1/3" onClick={()=>setIsShowContributionPopup(true)}><MainButtonLabel label="Contribuer au projet"/></button>
+                        )}
                         {isProjectOwner && (
                             <button className="w-1/3" onClick={()=>handleWithdraw()}><MainButtonLabel label="Récolter les fonds"/></button>
                         )}
