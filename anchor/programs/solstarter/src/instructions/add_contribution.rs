@@ -16,6 +16,9 @@ fn validate_project_status(project: &Account<Project>) -> Result<()> {
     if project.status != Status::Ongoing {
         return Err(ProjectError::ProjectNotOngoing.into());
     }
+    if Clock::get()?.unix_timestamp > project.end_time {
+        return Err(ProjectError::DeadlineReached.into());
+    } 
     Ok(())
 }
 
