@@ -64,7 +64,7 @@ const getActionData = (projectId?: string, project?: Project) => {
                     label: `${project.rewards[2].rewardAmount} SOL`
                 },
                 {
-                    href: "/api/actions/contribute?amount={amount}",
+                    href:  `${contributeUrl}?projectId=${projectId}&amount={amount}`,
                     label: "Send SOL",
                     parameters: [
                         {
