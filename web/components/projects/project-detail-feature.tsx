@@ -19,7 +19,7 @@ type ProjectDetailFeatureProps = {
 
 export function ProjectDetailFeature(props: ProjectDetailFeatureProps){
     const {publicKey} = useWallet();
-    const {projectsAccounts,usersAccounts,contributionsAccounts,programId} = useSolstarterProgram();
+    const {withdraw, projectsAccounts,usersAccounts,contributionsAccounts,programId} = useSolstarterProgram();
     const router = useRouter();
 
     const [projectToDisplay, setProjectToDisplay] = useState<Project | null>(null);
@@ -93,6 +93,17 @@ export function ProjectDetailFeature(props: ProjectDetailFeatureProps){
         }
     },[usersAccounts.data?.values,publicKey]);
 
+    const handleWithdraw = async () => {
+        try{
+            await withdraw.mutateAsync({
+                projectAccountPublicKey: new PublicKey(props.projectAccountPubkey),
+            });
+        } catch (error){
+            console.error('error',error);
+        }
+        
+    }
+
     if (projectsAccounts.isPending) return <LoaderSmall/>;
 
     if(!projectToDisplay) return <StandardErrorDisplay/>;
@@ -125,6 +136,7 @@ export function ProjectDetailFeature(props: ProjectDetailFeatureProps){
                     {/* interaction */}
                     <div className="flex flex-col md:flex-row justify-center items-center gap-4 w-full">
                         <button className="w-1/3" onClick={()=>setIsShowContributionPopup(true)}><MainButtonLabel label="Contribuer au projet"/></button>
+                        <button className="w-1/3" onClick={()=>handleWithdraw(true)}><MainButtonLabel label="Récolter les fonds"/></button>
                         <button className="w-1/3">
                             <div className={`flex justify-center items-center rounded-full bg-accentColor  hover:bg-accentColor/50  text-h3 text-white  text-center px-2 py-4 transition-all`}>
                              Partager sur X
