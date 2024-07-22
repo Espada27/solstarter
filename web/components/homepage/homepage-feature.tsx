@@ -1,6 +1,5 @@
 'use client';
 
-import { projects } from '@/data/localdata';
 import { AppHero } from '../ui/ui-layout';
 import HighlightProjects from './highlight-projects';
 import MainButtonLabel from '../button/MainButtonLabel';
