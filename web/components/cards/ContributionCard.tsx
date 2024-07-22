@@ -57,7 +57,7 @@ const ContributionCard = (props: Props) => {
             className='flex flex-col justify-start items-start w-[200px] relative'
         >
             <div className=
-                {`absolute flex badge ${levelToDisplay === "Niveau 1" &&  "bg-amber-200 border-amber-800 text-amber-800"} ${levelToDisplay === "Niveau 2" &&  "bg-green-500 border-green-800 text-green-800"} ${levelToDisplay === "Niveau 3" &&  "bg-blue-500 border-blue-800 text-blue-800"} border-2  border-solid bg-opacity-80  text-sm font-semibold gap-2 p-3 top-2 right-2 z-10`}>{levelToDisplay}</div>
+                {`absolute flex rounded-full ${levelToDisplay === "Niveau 1" &&  "bg-green-600/70"} ${levelToDisplay === "Niveau 2" &&  "bg-emerald-600/70"} ${levelToDisplay === "Niveau 3" &&  "bg-teal-600/70"}  text-sm font-semibold gap-2 px-3 py-1 top-2 right-2 z-10`}>{levelToDisplay}</div>
             <div className='w-full relative aspect-square'>
                 <Image alt='image' src={projectToDisplay.account.imageUrl} fill className=' object-cover rounded-t-xl'/>
             </div>
