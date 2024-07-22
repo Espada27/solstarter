@@ -7,7 +7,7 @@ import { getProgressPercentage, getSolFromLamports, millisecondsToDays } from '@
 
 type Props = {
     project:Project
-    projectAccountPubkey?:string
+    projectAccountPubkey:string
 }
 
 const ProjectCard = (props: Props) => {
@@ -39,7 +39,15 @@ const ProjectCard = (props: Props) => {
 
   return (
     <div className='flex items-stretch dark:bg-gradient-custom-gray bg-gradient-custom-gray-dark p-[2px] rounded-xl'>
-      <Link href={`/projects/${props.projectAccountPubkey}`} className='flex flex-col justify-start items-start '>
+      <Link 
+        href={{
+          pathname:`/projects/${props.projectAccountPubkey}`,
+          query:{
+            projectId:props.projectAccountPubkey.toString()
+          }
+        }} 
+        className='flex flex-col justify-start items-start '
+      >
           <div className='w-[420px] h-[230px] relative'>
             <div className='absolute flex badge bg-amber-200 border border-2 border-amber-800 border-solid bg-opacity-80 text-amber-800 text-sm font-semibold gap-2 p-3 bottom-2 left-2'>{dayTimeLeft.toString()} jours restants</div>
             <div className='absolute flex badge bg-indigo-200 border border-2 border-indigo-600 border-solid bg-opacity-80 text-indigo-800 text-sm font-semibold p-3 bottom-2 right-2'>{getSolFromLamports(props.project.goalAmount).toString()} SOL</div>
