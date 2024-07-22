@@ -54,7 +54,7 @@ const ProjectCard = (props: Props) => {
               <Image src={props.project.imageUrl} alt='project image' width={420} height={230}  className='object-cover aspect-video rounded-t-xl' />
           </div>
           {/* barre de progression */}
-          <div className="w-full bg-gray-200 dark:bg-gray-700">
+          <div className="w-full bg-gray-200 dark:bg-gray-700 z-0">
             <div className="bg-green-600 h-1.5" style={{width: `${progressPercentage}%`}}></div>
           </div>
           {/* info */}
