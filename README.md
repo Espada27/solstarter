@@ -18,24 +18,34 @@ Jérôme JULIEN
 Benjamin POULINET  
 Jonathan DUGARD
 
-## Stack Technique
+# Stack Technique
 
-# 🖥️Backend (Program)
+## 🖥️Backend (Program)
 
 Le program a été implémenté en utilisant le framework Anchor, outil de développement Solana
 
+### Tests Anchor
+Fichiers de tests : <https://github.com/Espada27/solstarter/tree/main/anchor/tests>
+
+Exécution : 
+```$ npm run anchor test```
+
 # 🛠️Architecture
 
-# Backend
+Monorepo architecture generate with [create-solana-dapp](https://www.npmjs.com/package/create-solana-dapp/v/3.0.5) ```3.0.5```
 
-- Anchor
-- Rust
+## Backend
+
+- Anchor ```0.30.1```
+- Rust ```1.79.0```
 - Jest
 - Cargo
 
-# Frontend
+## Frontend
 
 - NextJS
-- Solana JavaScript SDK (web3.js)
+- Tailwind CSS / daisyUI
+- Solana JavaScript SDK (web3.js) ```1.91.9```
+- Anchor ```0.30.1```
 - React query pour la gestion des appels async au program
 - Solana Actions (Blinks)
