@@ -5,7 +5,7 @@
  * IDL can be found at `target/idl/solstarter.json`.
  */
 export type Solstarter = {
-  "address": "CDSfYDw1tgrc4y1NDuMn8dkTSKuz32XkPPh5dj4pgD6R",
+  "address": "EPYqwH4n7Eu8n8NAwr1PorvsNJsjLfJDaQ7Q9QXxX8fX",
   "metadata": {
     "name": "solstarter",
     "version": "0.1.0",
@@ -209,6 +209,38 @@ export type Solstarter = {
           "type": "string"
         }
       ]
+    },
+    {
+      "name": "withdraw",
+      "discriminator": [
+        183,
+        18,
+        70,
+        156,
+        148,
+        109,
+        161,
+        34
+      ],
+      "accounts": [
+        {
+          "name": "project",
+          "writable": true
+        },
+        {
+          "name": "ownerPubkey",
+          "writable": true,
+          "signer": true,
+          "relations": [
+            "project"
+          ]
+        },
+        {
+          "name": "systemProgram",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": []
     }
   ],
   "accounts": [
@@ -255,8 +287,8 @@ export type Solstarter = {
   "errors": [
     {
       "code": 6000,
-      "name": "transferFailed",
-      "msg": "Transfer of funds failed"
+      "name": "unreachedGoalAmount",
+      "msg": "Goal amount not reached. Withdraw aborted."
     }
   ],
   "types": [
