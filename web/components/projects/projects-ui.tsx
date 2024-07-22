@@ -19,18 +19,18 @@ export function ProjectFilter(props:ProjectFilterProps){
         <GrayDisplayBlock padding="4">
             <div className='flex justify-between items-center w-full px-4'>
                 <div className='flex justify-start gap-2 w-1/2 '>
-                    <input type="radio" id='ongoing' checked={props.status === "ongoing"} onChange={()=>props.setStatus("ongoing")} className='p-2'/>
-                    <label className='w-full'>
+                <label className='w-full'>
+                    <input type="radio" id='ongoing' checked={props.status === "ongoing"} onChange={()=>props.setStatus("ongoing")} className='mr-1'/>
                     En cours
-                    </label>
-                    <input type="radio" id='closed' checked={props.status === "closed"} onChange={()=>props.setStatus("closed")}/>
-                    <label className='w-full'>
+                </label>
+                <label className='w-full'>
+                    <input type="radio" id='closed' checked={props.status === "closed"} onChange={()=>props.setStatus("closed")} className='mr-1'/>
                     Terminée
-                    </label>
-                    <input type="radio" id='all' checked={props.status === null} onChange={()=>props.setStatus(null)}/>
-                    <label className='w-full'>
+                </label>
+                <label className='w-full'>
+                    <input type="radio" id='all' checked={props.status === null} onChange={()=>props.setStatus(null)} className='mr-1'/>
                     Tous
-                    </label>
+                </label>
                 </div>
                 <div className='flex justify-end w-full'>
                     <InputFieldTransparent value={props.searchTerm} placeholder="Rechercher un projet" onchange={(e)=>props.setSearchTerm(e.target.value)}/>
