@@ -18,7 +18,7 @@ module.exports = {
         "mainButtonDark":"#fafafa",
         "secondColor":"#EFEFEF",
         "secondColorDark":"#525252",
-        "accentColor":"#445E85", 
+        "accentColor":"#3D6AAD", 
         "textColor-main":"#000000",
         "textColor-second":"#707070",
         "textColor-main-dark":"#FFFFFF",
