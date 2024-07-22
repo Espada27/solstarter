@@ -38,6 +38,10 @@ interface ContributionArg {
   amount: number
 }
 
+interface WithdrawArgs {
+  projectAccountPublicKey: PublicKey,
+}
+
 export function useSolstarterProgram() {
   const { connection } = useConnection();
   const { cluster } = useCluster();
@@ -139,12 +143,12 @@ export function useSolstarterProgram() {
         .rpc(); // launch the transaction
 
     },
-    onSuccess: (signature) => {
+    onSuccess: async (signature) => {
       transactionToast(signature);
       projectsAccounts.refetch();
-      router.push('/myprofile');
+      router.push('/projects/${newProjectAddress}');
     },
-    onError: () => toast.error('Erreur dans l\'execution du programme'),
+    onError: async () => toast.error('Erreur dans l\'execution du programme'),
   });
 
   const addContribution = useMutation<string,Error,ContributionArg>({
@@ -178,6 +182,28 @@ export function useSolstarterProgram() {
     onError: () => toast.error('Erreur dans l\'execution du programme'),
   });
 
+  /* Only the project owner can withdraw the funds */
+  const withdraw = useMutation<string, Error, WithdrawArgs>({
+    mutationKey: ['solstarter', 'withdraw', { cluster }],
+    mutationFn: async ({
+      projectAccountPublicKey
+    }): Promise<string> => {
+
+      // Execute the transaction
+      await program.methods
+        .withdraw()
+        .accountsPartial({project: projectAccountPublicKey})
+        .rpc();
+
+      return 'Withdrawal successful';
+    },
+    onSuccess: async (signature) => {
+      transactionToast(signature);
+      projectsAccounts.refetch();
+    },
+    onError: async () => toast.error('Erreur dans l\'execution du programme'),
+  });
+
   return {
     program,
     programId,
@@ -187,6 +213,7 @@ export function useSolstarterProgram() {
     projectsAccounts,
     createProject,
     addContribution,
-    contributionsAccounts
+    contributionsAccounts,
+    withdraw,
   };
 }

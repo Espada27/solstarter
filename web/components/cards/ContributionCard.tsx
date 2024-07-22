@@ -4,6 +4,7 @@ import React, { use, useEffect, useState } from 'react'
 import { useSolstarterProgram } from '../solstarter/solstarter-data-access'
 import Image from 'next/image'
 import LoaderSmall from '../displayElements/LoaderSmall'
+import { getSolFromLamports } from '@/utils/utilsFunctions'
 
 type Props = {
     contributions:Contribution
@@ -39,9 +40,9 @@ const ContributionCard = (props: Props) => {
             <div className='w-full relative aspect-square'>
                 <Image alt='image' src={projectToDisplay.account.imageUrl} fill className=' object-cover rounded-t-xl'/>
             </div>
-            <div className='flex flex-col items-start justify-center gap-2 p-2 bg-white h-1/3 rounded-b-xl'>
+            <div className='flex flex-col items-start justify-center gap-2 p-2 bg-white h-1/3 rounded-b-xl w-full'>
                 <p className='text-textColor-main'>{projectToDisplay.account.name}</p>
-                <p className='text-textColor-second'>Ma contributiion : {props.contributions.amount.toString()} SOL</p>
+                <p className='text-textColor-second'>Ma contrib : {getSolFromLamports(props.contributions.amount).toString() } SOL</p>
             </div>
         </Link>
     )

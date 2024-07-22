@@ -7,7 +7,7 @@ pub mod state;
 use crate::state::project::Reward;
 use instructions::*;
 
-declare_id!("CDSfYDw1tgrc4y1NDuMn8dkTSKuz32XkPPh5dj4pgD6R");
+declare_id!("9A7Fd4CEmBWVTniRwQfcu1CKfUjzx7UuTA28zrycgasg");
 
 #[program]
 pub mod solstarter {
@@ -44,5 +44,9 @@ pub mod solstarter {
 
     pub fn add_contribution(ctx: Context<AddContribution>, amount: u64) -> Result<()> {
         instructions::add_contribution(ctx, amount)
+    }
+
+    pub fn withdraw(ctx: Context<WithdrawFunds>) -> Result<()> {
+        instructions::withdraw(ctx)
     }
 }
