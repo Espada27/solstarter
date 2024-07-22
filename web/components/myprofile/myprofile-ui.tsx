@@ -177,10 +177,15 @@ export function ContributionsTab({userContributions}:{userContributions:AccountW
           {userContributions && userContributions.length === 0 && 
             <p className="text-textColor-second dark:text-textColor-second-dark">Vous n&apos;avez pas encore contribué à un projet</p>
           }
-          {userContributions && userContributions.map((contribution, index) => (
-            <ContributionCard key={index} contributions={contribution.account}/>
-          ))}
+          <div 
+                className="grid gap-20  w-full justify-center"
+                style={{gridTemplateColumns:"repeat(auto-fit,minmax(200px,auto)"}} // handle automatic number of column in responsive
+            >
+            {userContributions && userContributions.map((contribution, index) => (
+              <ContributionCard key={index} contributions={contribution.account}/>
+            ))}
           </div>
+        </div>
       </GrayDisplayBlock>
     )
 }

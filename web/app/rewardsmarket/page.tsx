@@ -1,11 +1,8 @@
+import { RewardMarketFeature } from '@/components/rewardsmarket/rewardsmarket-feature'
 import React from 'react'
 
-// type Props = {}
-
-const RewardMarketPage = (/*props: Props*/) => {
-  return (
-    <div>RewardMarketPage</div>
-  )
+const RewardMarketPage = () => {
+  return <RewardMarketFeature/>
 }
 
 export default RewardMarketPage
