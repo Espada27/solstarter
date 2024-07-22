@@ -1,5 +1,6 @@
 export  enum ProjectStatus {
-    ongoing = "ongoing",
-    closed = "closed",
-    finished = "finished"
+    Draft = "draft",
+    Ongoing = "ongoing",
+    Completed = "completed",
+    Abandoned = "abandoned",
 }
