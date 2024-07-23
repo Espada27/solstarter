@@ -4,6 +4,7 @@ import Link from 'next/link'
 import React, { useEffect } from 'react'
 import { useSolstarterProgram } from '../solstarter/solstarter-data-access'
 import { getProgressPercentage, getSolFromLamports, millisecondsToDays, truncateString } from '@/utils/utilsFunctions'
+import FallbackImage from '../displayElements/FallbackImage'
 
 type Props = {
     project:Project
@@ -53,7 +54,13 @@ const ProjectCard = (props: Props) => {
             <div className='absolute flex justify-center items-center gap-1 rounded-full  bg-accentColor/80 text-white text-sm font-semibold px-3 py-1 bottom-2 right-2'>{getSolFromLamports(props.project.goalAmount).toString()} 
               <Image alt="sol" src={'/images/logo_sol_white.png'} width={15} height={15}/> 
             </div>
-              <Image src={props.project.imageUrl} alt='project image' width={420} height={230}  className='object-cover aspect-video rounded-t-xl' />
+              <FallbackImage 
+                alt='project image' 
+                fallbackImageSrc='/images/default_project_image.jpg' 
+                height={230} width={420} 
+                src={props.project.imageUrl}
+                classname='object-cover aspect-video rounded-t-xl'
+              />
           </div>
           {/* barre de progression */}
           <div className="w-full bg-gray-200 dark:bg-gray-700 z-0">

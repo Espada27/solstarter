@@ -5,6 +5,7 @@ import { useSolstarterProgram } from '../solstarter/solstarter-data-access'
 import Image from 'next/image'
 import LoaderSmall from '../displayElements/LoaderSmall'
 import { getSolFromLamports } from '@/utils/utilsFunctions'
+import FallbackImage from '../displayElements/FallbackImage'
 
 type Props = {
     contributions:Contribution
@@ -59,7 +60,14 @@ const ContributionCard = (props: Props) => {
             <div className=
                 {`absolute flex rounded-full ${levelToDisplay === "Niveau 1" &&  "bg-green-600/70"} ${levelToDisplay === "Niveau 2" &&  "bg-emerald-600/70"} ${levelToDisplay === "Niveau 3" &&  "bg-teal-600/70"}  text-sm font-semibold gap-2 px-3 py-1 top-2 right-2 z-10`}>{levelToDisplay}</div>
             <div className='w-full relative aspect-square'>
-                <Image alt='image' src={projectToDisplay.account.imageUrl} fill className=' object-cover rounded-t-xl'/>
+                <FallbackImage 
+                    alt='project image' 
+                    fallbackImageSrc='/images/default_project_image.jpg' 
+                    height={200} width={200} 
+                    src={projectToDisplay.account.imageUrl}
+                    classname='object-cover rounded-t-xl aspect-square'
+                />
+                {/* <Image alt='image' src={projectToDisplay.account.imageUrl} fill className=' object-cover rounded-t-xl'/> */}
             </div>
             <div className='flex flex-col items-start justify-center gap-2 p-2 bg-white h-1/3 rounded-b-xl w-full'>
                 <p className='text-textColor-main'>{projectToDisplay.account.name}</p>
