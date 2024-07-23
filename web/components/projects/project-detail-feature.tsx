@@ -16,6 +16,7 @@ import { set } from "@coral-xyz/anchor/dist/cjs/utils/features";
 import { Audiowide} from "next/font/google";
 import GrayDisplayBlock from "../displayElements/GrayDisplayBlock";
 import {BN} from "@coral-xyz/anchor"
+import FallbackImage from "../displayElements/FallbackImage";
 
 const audioWide = Audiowide({weight: '400',subsets: ['latin']});
 
@@ -158,7 +159,13 @@ export function ProjectDetailFeature(props: ProjectDetailFeatureProps){
                     {/* first row */}
                     <div className="flex flex-col items-start justify-between w-1/3 gap-2">
                         <div className="relative w-full aspect-square">
-                            <Image src={projectToDisplay.imageUrl} alt='project image' fill  className=' object-cover rounded-xl ' />
+                            <FallbackImage 
+                                alt='project image' 
+                                fallbackImageSrc='/images/default_project_image.jpg' 
+                                height={430} width={430} 
+                                src={projectToDisplay.imageUrl}
+                                classname='object-cover rounded-xl aspect-square'
+                            />
                         </div>
                         <div className="flex justify-between items-center w-full">
                             <p className="text-xl">Montant des contributions</p>
@@ -232,7 +239,9 @@ export function ProjectDetailFeature(props: ProjectDetailFeatureProps){
                         <div className="flex justify-start items-center gap-10">
                             <p className="text-textColor-second dark:text-textColor-second-dark w-full md:w-1/2">{ownerToDisplay?.bio}</p>
                             <div className='flex flex-col items-center justify-start gap-2 '>
-                                {ownerToDisplay.avatarUrl && <Image src={ownerToDisplay.avatarUrl} alt={ownerToDisplay.name} width={150} height={150} className='rounded-full'/>}
+                                {ownerToDisplay.avatarUrl && 
+                                    <FallbackImage alt="profil avatar" classname="rounded-full" fallbackImageSrc="/images/default_profil_icon.avif" height={150} width={150} src={ownerToDisplay.avatarUrl} />}
+                                    {/* <Image src={ownerToDisplay.avatarUrl} alt={ownerToDisplay.name} width={150} height={150} className='rounded-full'/> */}
                                 <p className='text-center'>{ownerToDisplay.name}</p>
                             </div>
                             {isProjectOwner && 
